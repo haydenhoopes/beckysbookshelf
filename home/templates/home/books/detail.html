@@ -1,0 +1,25 @@
+{% extends "home/base.html" %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <h2>{{ book.Title }}</h2>
+    <p><small>ID no. {{ book.BookID }}</small></p>
+    <div class="row">
+        <div class="col-sm-6">
+            <p><b>Author:</b> {{book.AuthorID}}</p>
+            <p><b>ISBN:</b> {{book.ISBN}}</p>
+            <p><b>Copyright Year:</b> {{book.CopyrightYear}}</p>
+            <p><b>Publisher:</b> {{book.PublisherID}}</p>
+        </div>
+
+
+
+        <div class="col-sm-6">
+            <p><b>Series:</b> {{book.SeriesID}}</p>
+            <p><b>Topic:</b> {{book.TopicID}}</p>
+            <p><b>Date Added:</b> {{book.DateAdded|date:"F d, Y"}}</p>
+            <a href="/browseall/update/{{ book.BookID }}" class="btn btn-warning">Edit</a>
+            <a href="/browseall/delete/{{ book.BookID }}" class="btn btn-danger text-light">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,14 @@
+{% extends "home/base.html" %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <h2>{{ publisher.Publisher }}</h2>
+    <p><small>ID no. {{ publisher.PublisherID }}</small></p>
+    <div class="row">
+
+        <div class="col-sm-6">
+            <a href="/publishers/update/{{ publisher.PublisherID }}" class="btn btn-warning">Edit</a>
+            <a href="/publishers/delete/{{ publisher.PublisherID }}" class="btn btn-danger text-light">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

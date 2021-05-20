@@ -1,0 +1,21 @@
+<!-- This file is not currently used. It is a custom form as opposed to a crispy form, which works
+for simple models but not complex ones. -->
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <form method="POST" action='/covers/create/' id="coverForm">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Add New Cover Type</legend>
+            <div class="row">
+
+                <div class="col-sm-6 ">
+                    <label to="cover">Cover Type</label>
+                    <input type="text" name="cover" placeholder="Cover Type" id="coverType" class="form-control" required>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

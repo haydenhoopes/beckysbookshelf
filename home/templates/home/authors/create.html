@@ -1,0 +1,16 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Author</legend>
+            {{ form|crispy }}
+        </fieldset>
+        <div class="form-group">
+            <button  class="btn btn-outline-primary" type="submit">Submit</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

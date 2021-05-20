@@ -1,0 +1,1 @@
+web: gunicorn --pythonpath beckysbookshelf beckysbookshelf.wsgi --log-file - --log-level debug

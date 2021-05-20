@@ -1,0 +1,343 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'home/main.css' %}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    {% if title %}
+        <title>Becky's Bookshelf - {{ title }}</title>
+    {% else %}
+        <title>Becky's Bookshelf</title>
+    {% endif %}
+
+    {% if title %}<title>Becky's Bookshelf - {{ title }}</title>{% else %}<title>Becky's Bookshelf</title>{% endif %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- The chart code -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</head>
+<style>
+    html,body{
+    overflow-x: hidden;
+}
+    h4 {
+        color:whitesmoke
+    }
+    a.leftPanel{
+        color: rgb(189, 188, 188);
+    }
+    a.leftPanel:hover {
+        color:lightgray;
+        text-decoration: none;
+        background-color: rgb(66, 107, 136);
+    }
+</style>
+{% include "home/navigation.html" %}
+
+
+<nav class="navbar navbar-expand-md navbar-light d-md-none" >
+      <div class="container">
+        <a>Actions</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#actionToggle" aria-controls="actionToggle" aria-expanded="false" aria-label="Toggle actions">
+        <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="actionToggle">
+          <div class="navbar-nav">
+            <a class="nav-item nav-link" href="/browseall/create">Add Book</a>
+            <a class="nav-item nav-link" href="/browseall/">Browse All Books</a>
+            <a class="nav-item nav-link" href="/browse/">Browse Books In Stock</a>
+
+            <a class="nav-item nav-link" href="/transactions/create">Add Sale</a>
+            <a class="nav-item nav-link" href="/transactions/">Browse All Sales</a>
+
+            <a class="nav-item nav-link" href="/authors/create">Add Author</a>
+            <a class="nav-item nav-link" href="/authors/">Browse All Authors</a>
+
+            <a class="nav-item nav-link" href="/customers/create">Add Customer</a>
+            <a class="nav-item nav-link" href="/customers/">Browse All Customers</a>
+
+            <a class="nav-item nav-link" href="/topics/create">Add Topic</a>
+            <a class="nav-item nav-link" href="/topics/">Browse All Topics</a>
+
+            <a class="nav-item nav-link" href="/publishers/create">Add Publisher</a>
+            <a class="nav-item nav-link" href="/publishers/">Browse All Publishers</a>
+
+            <a class="nav-item nav-link" href="/series/create">Add Series</a>
+            <a class="nav-item nav-link" href="/series/">Browse All Series</a>
+
+            <!-- <a class="nav-item nav-link" href="/covertype/create" disabled>Add Cover Type</a> -->
+            <!-- <a class="nav-item nav-link" href="/covertype/">Browse All Cover Types</a> -->
+          </div>
+        </div>
+      </div>
+    </nav>
+
+
+
+
+<div class="bg-light">
+    <div class="row">
+
+        <!-- The left bar -->
+        <div class="d-none d-md-block  col-sm-2 pt-3" style="background: rgb(55,89,113);
+        background: linear-gradient(180deg, rgba(55,89,113,1) 30%, rgba(40,63,79,1) 100%);">
+            <nav class="text-light">
+                    <h4 class="pl-3">Books</h4>
+                    <a href="/browseall/create/" class="leftPanel"><p class="pl-3">Add Book</p></a>
+                    <a href="/browseall/" class="leftPanel"><p class="pl-3">Browse Books</p></a>
+                    
+                    <h4 class="pl-3">Authors</h4>
+                    <a href="/authors/create/" class="leftPanel"><p class="pl-3">Add Author</p></a>
+                    <a href="/authors/" class="leftPanel"><p class="pl-3">Browse Authors</p></a>
+
+                    <h4 class="pl-3">Topics</h4>
+                    <a href="/topics/create/" class="leftPanel"><p class="pl-3">Add Topic</p></a>
+                    <a href="/topics/" class="leftPanel"><p class="pl-3">Browse Topics</p></a>
+
+                    <h4 class="pl-3">Transactions</h4>
+                    <a href="/transactions/create/" class="leftPanel"><p class="pl-3">Add Transaction</p></a>
+                    <a href="/transactions/" class="leftPanel"><p class="pl-3">Browse Transactions</p></a>
+
+                    <h4 class="pl-3">Customers</h4>
+                    <a href="/customers/create/" class="leftPanel"><p class="pl-3">Add Customer</p></a>
+                    <a href="/customers/" class="leftPanel"><p class="pl-3">Browse Customers</p></a>
+
+                    <h4 class="pl-3">Publishers</h4>
+                    <a href="/publishers/create/" class="leftPanel"><p class="pl-3">Add Publisher</p></a>
+                    <a href="/publishers/" class="leftPanel"><p class="pl-3">Browse Publishers</p></a>
+
+                    <h4 class="pl-3">Series</h4>
+                    <a href="/series/create/" class="leftPanel"><p class="pl-3">Add Series</p></a>
+                    <a href="/series/" class="leftPanel"><p class="pl-3">Browse Series</p></a>
+                    
+                    <h4 class="pl-3">Cover Types</h4>
+                    <a href="/covers/create/" class="leftPanel"><p class="pl-3">Add Cover Types</p></a>
+                    <a href="/covers/" class="leftPanel"><p class="pl-3">Browse Cover Types</p></a>
+              </nav>
+        </div>
+
+
+        <div class="col-sm-7 pt-3 ">
+            <h3 class="pl-3">Dashboard</h3>
+            <!-- The chart space -->
+            <div class="my-5 px-3" id="myChartDiv">
+                    <canvas id="myChart" ></canvas>
+            </div>
+
+            <div class="my-5 px-3">
+                For the last 7 <select onchange="revenueGraph()" id="timeId">
+                    <option>days</option>
+                    <option>weeks</option>
+                    <option>months</option>
+                </select>
+                <div id="transactionsChartDiv">
+                    <canvas id="transactionsChart"></canvas>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-sm-2 pt-3">
+            <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+            <script type="text/javascript">
+                $(function () {
+                    $("#ddlModels").change(function () {
+                        if ($(this).val() == 1) {
+                            $("#txtOther").removeAttr("disabled");
+                            $("#txtOther").focus();
+                        } else {
+                            $("#txtOther").attr("disabled", "disabled");
+                        }
+                    });
+                });
+            </script>
+            <h5 class="pl-3">Generate Report</h5>
+            <form class="form-group px-3" id="reportForm" onsubmit="getYear(this)" target="_blank">
+                <select style="word-wrap:break-word;" id="ddlModels" onchange="EnableDisableTextBox(this)">
+                    <option>Choose a report...</option>
+                    <option value="1">COGS Report</option>
+                    <option value="2">Most frequently purchased books</option>
+                </select>
+                <br />
+                <br />
+                Enter year:
+                <input type="number" id="txtOther" disabled="disabled" required minlength="4" maxlength="4" size="4" min="1992" max="3000" placeholder="Year"/>
+                <script>
+                    var today = new Date();
+                    var yyyy = today.getFullYear();
+                    today = yyyy;
+                    document.getElementById("txtOther").setAttribute("max", today);
+                </script>
+                <input type="submit" value="Go">
+{#                <button type="submit">Go</button>#}
+{#                <input type="submit" value="Go" class="btn btn-primary mt-2" id="year">#}
+                <script>
+                    function getYear() {
+                        var selectedValue = ddlModels.options[ddlModels.selectedIndex].value;
+                        if (selectedValue == 1) {
+                            var action_src = "cogs/" + document.getElementById("txtOther").value + '/';
+                            var report_form = document.getElementById("reportForm");
+                            report_form.action = action_src;
+                        } else {
+                            action_src = '#';
+                            report_form = document.getElementById("reportForm");
+                            report_form.action = action_src;
+                        }
+
+                    }
+                </script>
+            </form>
+        </div>
+
+    </div>    
+</div>
+<footer class=" bg-dark text-center p-3">
+    <div style="bottom: 5px; margin: auto;">
+        <p id="copyright-footer" class="text-light">Becky's Bookshelf &copy; 2021</p>
+        <span class="text-muted"><a href="/legal">Legal</a></span>
+        <span class="text-muted"> | </span>
+        <span class="text-muted"><a href="/privacy">Privacy</a></span>
+        <span class="text-muted"> | </span>
+        <span class="text-muted"><a href="/admin">Admin</a></span>
+    </div>
+</footer>
+
+<script>
+    let months = {
+    "01": "January",
+    "02": "February",
+    "03": "March",
+    "04": "April",
+    "05": "May",
+    "06": "June",
+    "07": "July",
+    "08": "August",
+    "09": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December",
+};
+
+    $.ajax({
+        url: "/api/books",
+        success: function(bookData){
+            let labels = [];
+            let counts = [];
+            for (book of bookData) {
+                labels.push(months[book['MonthAdded']]);
+                counts.push(Number(book['count']));
+            };
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Number of books recieved',
+                    data: counts,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+            });
+        },
+        error: (err, as, sd) => {
+            console.log(sd);
+        }
+    });
+
+function revenueGraph() {
+    let time = String($("#timeId").val());
+    $("#transactionsChart").remove();
+    $("#transactionsChartDiv").append("<canvas id='transactionsChart'></canvas>");
+    console.log(time);
+    if (time == undefined) {time = 'days'};
+
+    $.ajax({
+        url: "/api/transactions?time=" + time.slice(0, time.length-1),
+        success: function(transactionData){
+            let labels = [];
+            let counts = [];
+            for (transaction of transactionData) {
+                labels.push(`${transaction['month']}-${transaction['day']}-${transaction['year']}`);
+                counts.push(Number(transaction['price']));
+            };
+            var ctx = document.getElementById('transactionsChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Revenue',
+                    data: counts,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+            });
+        },
+        error: (err, as, sd) => {
+            console.log(sd);
+        }
+    });
+
+}
+
+    revenueGraph();
+</script>
+</html>

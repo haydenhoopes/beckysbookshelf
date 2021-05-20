@@ -1,0 +1,26 @@
+<!-- This file is not currently used. It is a custom form as opposed to a crispy form, which works
+for simple models but not complex ones. -->
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <form method="POST" action='/publishers/create/'>
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Create Publisher</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p><label to="publisher">Publisher</label>
+                    <input type="text" name="publisher" id="publisher"></p>
+                </div>
+            </div>
+
+        </fieldset>
+        <div class="form-group">
+            <button  class="btn btn-outline-primary" type="submit">Submit</button>
+            <a class="btn btn-outline-secondary" href="/publishers/">Browse all publishers</a>
+            <a class="text-muted" style="float:right">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

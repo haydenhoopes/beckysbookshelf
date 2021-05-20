@@ -1,0 +1,20 @@
+{% extends "home/base.html" %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <h2>{{ author.LastName }}, {{ author.FirstName }}</h2>
+    <p><small>ID no. {{ author.AuthorID }}</small></p>
+    <div class="row">
+        <div class="col-sm-6">
+            <p><b>Primary Topic:</b> {{ author.PrimaryTopic}}</p>
+        </div>
+
+
+
+        <div class="col-sm-6">
+            <p><b>Date Added:</b> {% if author.DateAdded == None %}Date Unknown{% else %}{{author.DateAdded|date:"F d, Y"}}{% endif %}</p>
+            <a href="/authors/update/{{ author.AuthorID }}" class="btn btn-warning">Edit</a>
+            <a href="/authors/delete/{{ author.AuthorID }}" class="btn btn-danger text-light">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

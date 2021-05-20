@@ -1,0 +1,11 @@
+{% extends "home/base.html" %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <h2>{{ cover.Cover}}</h2>
+    <p><small>ID No. {{cover.CoverID}}</small></p>
+            <p><b>Cover Type:</b> {{ cover.Cover }}</p><br>
+            
+                <a href="/covers/update/{{ cover.CoverID }}" class="btn btn-warning">Edit</a>
+                <a href="/covers/delete/{{ cover.CoverID }}" class="btn btn-danger text-light">Delete</a>
+</div>
+{% endblock content %}

@@ -1,0 +1,204 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'home/main.css' %}">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    {% if title %}
+        <title>Becky's Bookshelf - {{ title }}</title>
+    {% else %}
+        <title>Becky's Bookshelf</title>
+    {% endif %}
+<style>
+    body {
+        background-image: url('{% static "home/pexels-negative-space-34592.jpg" %}');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+</style>
+    {% if title %}<title>Becky's Bookshelf - {{ title }}</title>{% else %}<title>Becky's Bookshelf</title>{% endif %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+        {% if messages %}
+           {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }}" style="position: fixed; max-width: 50%; top: 4vh; left: 4vh; z-index: 1;" id="flashMessages">
+                    {{ message }}
+                  </div>
+              {% endfor %}
+          {% endif %}
+
+
+<body>
+  {% include "home/navigation.html" %}
+  <main role="main" class="container">
+      <div class="col-md-16">
+      {% block content %}{% endblock %}
+      </div>
+  </main>
+  {% block footer %}
+  {% include "home/footer.html" %}
+{% endblock %}
+</body>
+<script>
+     $("#flashMessages").delay(5000).fadeOut()
+function getTopics() {
+        let text = document.getElementById('topicParent').value;
+        $.ajax({
+            url: `/api/topicInput/?text=${text}`,
+            method: "GET",
+            success: function(topics) {
+                $('#topics').empty();
+                let datalist = $("#topics")
+                for (t of topics) {
+                    datalist.append(`<option value="${t.topic}"></option>`);
+                }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
+}
+
+function getAuthors() {
+        let text = document.getElementById('authorLastName').value;
+        $.ajax({
+            url: `/api/authorInput/?text=${text}`,
+            method: "GET",
+            success: function(authors) {
+                $('#LastName').empty();
+                let datalist = $("#LastName")
+                for (a of authors) {
+                    datalist.append(`<option value='${a.lastName}, ${a.firstName}'></option>`)
+                }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
+}
+
+function getBooks() {
+        let text = document.getElementById('bookParent').value;
+        $.ajax({
+            url: `/api/bookInput/?text=${text}`,
+            method: "GET",
+            success: function(books) {
+                $('#books').empty();
+                let datalist = $("#books")
+                for (b of books) {
+                    datalist.append(`<option value="${b.title}"></option>`);
+                }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
+}
+
+function getCustomers() {
+        let text = document.getElementById('customerParent').value;
+        $.ajax({
+            url: `/api/customerInput/?text=${text}`,
+            method: "GET",
+            success: function(customers) {
+                $('#customers').empty();
+                let datalist = $("#customers")
+                for (c of customers) {
+                    datalist.append(`<option value="${c.lastName}, ${c.firstName}"></option>`);
+                }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
+}
+
+function getCovers() {
+        let text = document.getElementById('coverParent').value;
+        $.ajax({
+            url: `/api/coverInput/?text=${text}`,
+            method: "GET",
+            success: function(covers) {
+                $('#covers').empty();
+                let datalist = $("#covers")
+                for (c of covers) {
+                    datalist.append(`<option value="${c.cover}"></option>`);
+                }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
+}
+
+function getConditions() {
+        let text = document.getElementById('conditionParent').value;
+        $.ajax({
+            url: `/api/conditionInput/?text=${text}`,
+            method: "GET",
+            success: function(conditions) {
+                $('#conditions').empty();
+                let datalist = $("#conditions")
+                for (c of conditions) {
+                    datalist.append(`<option value="${c.condition}"></option>`);
+                }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
+}
+
+function getPublishers() {
+        let text = document.getElementById('publisherParent').value;
+        $.ajax({
+            url: `/api/publisherInput/?text=${text}`,
+            method: "GET",
+            success: function(publishers) {
+                $('#publishers').empty();
+                let datalist = $("#publishers")
+                for (p of publishers) {
+                    datalist.append(`<option value='${p.publisher}'></option>`)
+                }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
+}
+
+function getSeries() {
+        let text = document.getElementById('seriesParent').value;
+        $.ajax({
+            url: `/api/seriesInput/?text=${text}`,
+            method: "GET",
+            success: function(series) {
+                $('#series').empty();
+                let datalist = $("#series")
+                if (series.length == 0) {
+                    datalist.append('<option>No item found</option>')
+                } else {
+                    for (s of series) {
+                        datalist.append(`<option value='${s.series}'></option>`)
+                    }
+                } 
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
+}
+</script>
+</html>

@@ -1,0 +1,164 @@
+{% extends "home/base.html" %}
+{% block content %}
+
+<style>
+  p {
+    word-wrap: break-word;
+  }
+</style>
+<div class=" p-4 m-3 bg-white">
+    <div>
+        <h2 class="py-4">About Us</h2>
+        <ul class="nav nav-pills">
+          <li class="nav-item">
+            <button class="nav-link active btn-outline-success info btn btn-xs" onclick="tab(this.id)" id="aboutUsButton">About Us</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-success info" onclick="tab(this.id)" id="didYouKnowButton">Did you know?</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-success info" onclick="tab(this.id)" id="creditButton">How Book Credit Works</button>
+          </li>
+          <li class="nav-item">
+            <button class="nav-link text-success info" onclick="tab(this.id)" id="contactButton">Contact Us</button>
+          </li>
+          <!-- <li class="nav-item">
+            <button class="nav-link text-success info" onclick="tab(this.id)" id="directionsButton">Directions</button>
+          </li> -->
+        </ul>
+      </div>
+
+      <!-- The About Us Information -->
+      <div id="aboutUs" class="info-area">
+        <h6 class="mt-5">About Us</h6>
+        <div class="row">
+          <div class="col-sm-6">
+        <h2>Becky's Bookshelf</h2>
+          <table>
+            <tr>
+              <th>Store Hours</th>
+              <th></th>
+            </tr>
+            <tr>
+              <td>Tues-Sat</td>
+              <td>11:00 a.m. - 5:00 p.m.</td>
+            </tr>
+            <tr>
+              <td>Sund-Mon</td>
+              <td>CLOSED</td>
+            </tr>
+          </table>
+        </div>
+        <div class="col-sm-6">
+          <h6 class="text-success">Recycled books at reduced prices!</h6>
+          <h6  class="text-success">Most books are half the cover price or LESS.</h6>
+          <p><u>29 West 100 North Logan, Utah 84321</u></p>
+          <p><b>(435) 753-7650</b></p>
+        </div>
+        </div>
+      </div>
+
+
+      <div id="didYouKnow" style="display: none;"  class="info-area">
+        <h6 class="mt-5">Did You Know</h6>
+        <div class="row">
+          <div class="col-sm-6">
+            <ul>
+              <li>Has an in-store inventory of over <a href="/browse/">20,000 titles</a>?</li>
+              <li>Has a <a href="/browse/">database</a> of all our books?</li>
+              <li>Has a separate inventory of almost 3,000 books listed for sale on Amazon?</li>
+              <li>Lets you buy from our Amazon stock and NOT pay for shipping? <div class="small text-muted">(When purchased locally in-store)</div></li>
+              <li>Charges book-credit customers only $2.00 or LESS per book?</li>
+              <li>Charges book-credit customer THE SAME for almost all hardback books as we do for paperbacks? <div class="small text-muted">($2.00)</div></li>
+              <li>Has <b style="font-size: larger;">LARGE PRINT BOOKS?</b></li>
+            </ul>
+        </div>
+          <div class="col-sm-6">
+            <ul>
+              <li>Has shopping baskets available?</li>
+              <li>Has a Women's Fiction section?</li>
+              <li>Has LDS books for adults, youth, and children?</li>
+              <li>Will special-order books for you?</li>
+              <li>Will put your wish-list of books in our database and call you when any of the books arrive in-store?</li>
+              <li>Sends out emails about sales and other information?</li>
+              <li>Personally cares about each customer and sincerely appreciates their business?</li>
+              <li>That Becky also loves chocolate?</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+
+      <div id="credit" style="display: none;"  class="info-area">
+        <h6 class="mt-5">Book Credit</h6>
+        <div class="row">
+          <div class="col-sm-6">
+            <h4 class='text-success'>What is book credit</h4>
+            <p>When someone brings used books in to donate to Becky's Bookshelf we give some of the original book value back to the customer.</p>
+            <p>On our book Labels you can find out if a certain book is purchasable with book-credit.
+              Trade credit may be used towards most purchases in Becky's Bookshelf.</p>
+
+            <h4 class='text-success'>How to get book credit</h4>
+            <p>In-store credit of 1/4 cover price is given for usable books.
+              Processing may take up to 1 month.</p>
+        </div>
+          <div class="col-sm-6">
+            <h4 class='text-success'>How to use book credit</h4>
+            <p>When making a purchase just let the sales clerk know that you have store credit and that you would like to use it.</p>
+            <p>Using trade credit  during a sales transaction reduces most used book prices down to $2.00 or less.</p>
+
+            <h4 class='text-success'>Other info about book credit</h4>
+            <p>Unusable books are donated at the discretion of BBS and no trade credit is given.
+              Currently book-credit is only usable on in-store purchases.</p>
+              <p>Books are considered unusable if they are: Moldy, Damaged, Over printed, or other reasons.
+                Books Traded to Becky's Bookshelf become property of BBS and are non-refundable.</p>
+          </div>
+        </div>
+      </div>
+
+
+
+      <div id="contact" style="display: none;"  class="info-area">
+        <h6 class="mt-5">Contact</h6>
+        <div class="row">
+          <div class="col-sm-6">
+            <p><b class="text-success">Our Store: </b> 29 West 100 North Logan, Utah 84321</p>
+            <p><b class="text-success">By Phone: </b> (435) 753-7650</p>
+            <p><b class="text-success">By Email: </b> beckysbookshelf@gmail.com</p>
+            <p><b class="text-success">On Facebook: </b> <a href='https://www.facebook.com/beckysbookshelf/'>https://www.facebook.com/beckysbookshelf/</a></p>
+            <p><b class="text-success">On Amazon: </b> <a href="www.amazon.com/shops/beckysbookshelfbusiness">www.amazon.com/shops/beckysbookshelfbusiness</a></p>
+        </div>
+          <div class="col-sm-6">
+            <p><b>Becky: </b> Owner</p>
+            <p><b>Kris: </b> Volunteer</p>
+            <p><b>David: </b> Volunteer</p>
+            <p><b>Sarah: </b>Volunteer</p>
+            <p><b>Andrew: </b> Consultant</p>
+
+          </div>
+        </div>
+      </div>
+
+
+
+
+</div>
+
+<script>
+  function tab(id) {
+    let allInfo = document.getElementsByClassName('info');
+    let allInfoAreas = document.getElementsByClassName('info-area');
+
+    idInfo = id.slice(0, -6);
+    
+    for (let i = 0; i < allInfo.length; i++) {
+      allInfoAreas[i].style.display = 'none';
+      allInfo[i].className = 'text-success info nav-link';
+    }
+    $(`#${idInfo}`).show(400);
+    $(`#${id}`).addClass(['active', 'btn-outline-success'])
+    $(`#${id}`).removeClass('text-success');
+  }
+</script>
+
+{% endblock content %}

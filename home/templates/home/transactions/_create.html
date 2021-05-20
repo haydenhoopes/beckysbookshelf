@@ -1,0 +1,132 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <form method="POST" id="transactionForm">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">New Transaction</legend>
+            <div class="row">
+
+                <div class="col-sm-6 ">
+                    <input type="hidden" value="{{ transaction.ID }}" name="pk" id="pk">
+
+                    <label to="book">Book</label>
+                    <input type="text" name="book" placeholder="Start typing to search" id="bookParent" list="books" oninput="getBooks()" class="form-control" required autocomplete="off" {% if transaction %} value="{{ transaction.BookID }}" {% endif %} autocomplete="off">
+                    <datalist id="books">
+                    </datalist>
+                    <p><a href="/browseall/create/">Add a new book</a></p>
+
+                    <p><label to="cover">Cover</label>
+                    <input type="text" name="cover" placeholder="Start typing to search" id="coverParent" list="covers" oninput="getCovers()" class="form-control" required {% if transaction %} value="{{ transaction.CoverID }}" {% endif %} autocomplete="off">
+                    <datalist id="covers">
+                    </datalist>
+                    <p><a href="/covers/create/">Add a new cover</a></p>
+
+                    <p><label to="customer">Customer</label>
+                        <input type="text" name="customer" placeholder="Search by last name" id="customerParent" list="customers" oninput="getCustomers()" class="form-control" required {% if transaction %} value="{{ transaction.CustomerID }}" {% endif %} autocomplete="off">
+                        <datalist id="customers">
+                        </datalist>
+                        <p><a href="/customers/create/">Add a new customer</a></p>
+                    <p><label for="quantity">Quantity</label>
+                        <input class="form-control" type="number" name="quantity" {% if transaction %} value="{{ transaction.Qty }}" {% endif %}>
+                    </p>
+                </div>
+
+                <div class="col-sm-6">
+                    <p><label to="price">Price</label>
+                            <input type="number" name="price" id="price" class="form-control" required {% if transaction %} value="{{ transaction.Price }}" {% endif %}></p>
+
+                    <p><label to="dateOfSale">Date Of Sale</label>
+                    <input type="date" name="dateOfSale" id="dateOfSale" class="form-control" required {% if not transaction %} value='{% now "Y-m-d" %}' {% else %} value='{{transaction.DateOfSale|date:"Y-m-d"}}'{% endif %}></p>
+
+                    <p><label to="condition">Condition</label>
+                        <input type="text" name="condition" placeholder="Start typing to search" id="conditionParent" list="conditions" oninput="getConditions()" class="form-control" required {% if transaction %} value="{{ transaction.ConditionID }}" {% endif %} autocomplete="off">
+                        <datalist id="conditions">
+                        </datalist>
+                        <p><a href="/conditions/create/">Add a new condition</a></p>
+
+                    <p><label to="description">Description</label>
+                        <textarea style="resize: vertical;" class="form-control" name="description" id="description" form="transactionForm">{% if transaction %}{{ transaction.Description }}{% endif %}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button  class="btn btn-outline-primary" type="submit">Submit</button>
+                <a class="btn btn-outline-secondary" href="/transactions/">Browse all transactions</a>
+                <a class="text-muted m-2" style="float:right; cursor:pointer" id='cancel' onclick="window.history.back();">Cancel</a>    
+            </div>
+            <div style="text-align: center;"><a onclick="$('#moreFieldsRow')[0].classList.toggle('hidden');" href="#">More fields</a></div>
+
+            <!-- The hidden row -->
+            <div class="row small hidden mt-3" id="moreFieldsRow">
+                <div class="col-sm-4">
+                    <p><label to="resale">Resale</label>
+                    <input type="number" name="resale" id="resale" value="0" class="form-control" {% if transaction %} value="{{ transaction.Resale }}" {% endif %}></p>
+        
+                    <p><label to="tradePrice">Trade Price</label>
+                    <input type="number" name="tradePrice" id="tradePrice"  value="0" class="form-control" {% if transaction %} value="{{ transaction.TradePrice }}" {% endif %}></p>
+
+                    <p><label to="tradeAllowed">Trade Allowed</label>
+                    <input type="number" name="tradeAllowed" id="tradeAllowed" value="1" class="form-control" {% if transaction %} value="{{ transaction.TradeAllowed }}" {% endif %}></p>
+
+                    <p><label to="noTradeAllowed">No Trade Allowed</label>
+                    <input type="number" name="noTradeAllowed" id="noTradeAllowed" value="0" class="form-control" {% if transaction %} value="{{ transaction.NoTradeAllowed }}" {% endif %}></p>
+
+                    <p><label to="coverPrice">Cover Price</label>
+                    <input type="number" name="coverPrice" id="coverPrice" value="2" class="form-control" {% if transaction %} value="{{ transaction.CoverPrice }}" {% endif %}></p>
+
+                    <p><label to="discount">Discount</label>
+                    <input type="number" name="discount" id="discount" value="0" class="form-control" {% if transaction %} value="{{ transaction.Discount }}" {% endif %}></p>
+                </div>
+
+                <div class="col-sm-4">
+                    <p><label to="taxRate">Tax Rate</label>
+                    <input type="number" name="taxRate" id="taxRate" value="0" class="form-control" {% if transaction %} value="{{ transaction.TaxRate }}" {% endif %}></p>
+
+                    <p><label to="taxExempt">Tax Exempt</label>
+                    <input type="number" name="taxExempt" id="taxExempt" value="0" class="form-control" {% if transaction %} value="{{ transaction.TaxExempt }}" {% endif %}></p>
+                    
+                    <p><label to="cash">Cash</label>
+                    <input type="number" name="cash" id="cash" value="0" class="form-control" {% if transaction %} value="{{ transaction.Cash }}" {% endif %}></p>
+
+                    <p><label to="check">Check</label>
+                    <input type="number" name="check" id="check" value="0" class="form-control" {% if transaction %} value="{{ transaction.Check }}" {% endif %}></p>
+        
+                    <p><label to="checkNo">Check No.</label>
+                    <input type="number" name="checkNo" id="checkNo" value="0" class="form-control" {% if transaction %} value="{{ transaction.CheckNum }}" {% endif %}></p>
+
+                    <p><label to="giftCertificate">Gift Certificate</label>
+                    <input type="number" name="giftCertificate" id="giftCertificate" value="0" class="form-control" {% if transaction %} value="{{ transaction.GiftCert }}" {% endif %}></p>
+                </div>
+
+                <div class="col-sm-4">
+                    <p><label to="nonTradeX">Non Trade X</label>
+                    <input type="number" name="nonTradeX" id="nonTradeX" value="0" class="form-control" {% if transaction %} value="{{ transaction.NonTradex }}" {% endif %}></p>
+
+                    <p><label to="nonTradeY">Non Trade Y</label>
+                    <input type="number" name="nonTradeY" id="nonTradeY" value="0" class="form-control" {% if transaction %} value="{{ transaction.NonTradeY }}" {% endif %}></p>
+
+                    <p><label to="tradeCost">Trade Cost</label>
+                    <input type="number" name="tradeCost" id="tradeCost" value="0" class="form-control" {% if transaction %} value="{{ transaction.TradeCost }}" {% endif %}></p>
+
+                    <p><label to="inOut">In/Out</label>
+                    <input type="number" name="inOut" id="inOut" value="0" class="form-control" {% if transaction %} value="{{ transaction.InOut }}" {% endif %}></p>
+
+                    <p><label to="labels">Labels</label>
+                        <input type="number" name="labels" value="0" id="labels" class="form-control" {% if transaction.Labels %}value="{{ transaction.Labels }}"{% endif %}>
+                </div>
+            </div>
+
+        </fieldset>
+        <input type="hidden" id="lastUpdate" name="lastUpdate" value='{% now "Y-m-d" %}'>
+
+    </form>
+</div>
+
+<style>
+    .hidden {
+  display: none;
+  opacity: 0;
+}
+</style>
+{% endblock %}

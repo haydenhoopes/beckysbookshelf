@@ -1,0 +1,74 @@
+{% extends "home/base.html" %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+
+  <!-- The search bar -->
+  <div class="text-center">
+    <h3 class="margin pt-3">Search for a book</h3>
+    <div style="max-width: 500px; margin: auto;" class="pb-5">
+      <form action="/browseall/" method="GET">
+        <input style="display: inline; max-width: 230px;" class="form-control mr-sm-2" type="search" value="{{ previousQuery }}" placeholder="Search" aria-label="Search" name="book"> 
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      {% if user.is_authenticated %}
+      <a href="/browseall/create">Add new book</a>
+      {% endif %}
+    </div>
+  </div>
+
+
+
+  <div class="mh-4">
+
+
+          <table class="table table-sm table-striped table-hover">
+            <tr>
+              {% if user.is_authenticated %}
+              <th></th>
+              {% endif %}
+              <th>Title</th>
+              <th>Author</th>
+              <th class="d-none d-sm-none d-md-table-cell">Genre</th>    
+              {% if user.is_authenticated %}  
+                <th class="d-none d-sm-none d-md-table-cell"></th>
+                {% endif %}
+            </tr>
+            {% for book in books %}
+              <tr>
+                {% if user.is_authenticated %} 
+                <td><input type="checkbox" class="form-check"></td>
+                {% endif %}
+                <td> {% if user.is_authenticated %}<a href="/browseall/{{book.BookID}}/">{{ book.Title }}</a>{% else %} {{book.Title}} {% endif %}</td>
+                <td>{{ book.AuthorID }}</td>
+                  <td class="d-none d-sm-none d-md-table-cell">{{ book.TopicID }}</td>
+                  {% if user.is_authenticated %}   
+                  <td class="d-none d-sm-none d-md-table-cell"><a class="btn btn-sm btn-outline-danger" href="/browseall/delete/{{book.BookID}}/" style="float: right;">Delete</a></td>
+                  {% endif %}
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+
+    {% load my_tags %}
+    {% if is_paginated %}
+        {% if page_obj.has_previous %}
+            <a class="btn btn-outline-info mb-4" href="?{% param_replace page=1 %}">First</a>
+{#            <a class="btn btn-outline-info mb-4" href="?{% param_replace page=page_obj.previous_page_number %}">Previous</a>#}
+        {% endif %}
+
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <a class="btn btn-info mb-4" href="?{% param_replace page=num %}">{{ num }}</a>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-outline-info mb-4" href="?{% param_replace page=num %}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+{#            <a class="btn btn-outline-info mb-4" href="?{% param_replace page=page_obj.next_page_number %}">Next</a>#}
+            <a class="btn btn-outline-info mb-4" href="?{% param_replace page=page_obj.paginator.num_pages %}">Last</a>
+        {% endif %}
+
+    {% endif %}
+    </div>
+</div>
+{% endblock content %}

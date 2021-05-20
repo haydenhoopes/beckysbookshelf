@@ -1,0 +1,44 @@
+{% extends "home/base.html" %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <h2>Transaction No. {{ transaction.ID}}</h2>
+    <p><small>Date Sold: {{transaction.DateOfSale|date:"F d, Y"}}</small></p>
+    <div class="row">
+        <div class="col-sm-6">
+            <p><b>Book:</b> {{ transaction.BookID }}</p>
+            <p><b>Price:</b> ${{ transaction.Price|floatformat:2 }}</p>
+            <p><b>Resale:</b> {{ transaction.Resale }}</p>
+            <p><b>Trade Price:</b> ${{ transaction.TradePrice|floatformat:2 }}</p>
+            <p><b>Quantity:</b> {{ transaction.Qty }}</p>
+            <p><b>Trade Allowed?:</b> {% if transaction.TradeAllowed == 0 %}No{% else %}Yes{% endif %}</p>
+            <p><b>Cover Price:</b> ${{ transaction.CoverPrice|floatformat:2 }}</p>
+            <p><b>Discount:</b> ${{ transaction.Discount|floatformat:2 }}</p>
+            <p><b>Non Trade In:</b> ${{ transaction.NonTradex}}</p>
+            <p><b>Cover Type:</b> {{ transaction.CoverID }}</p>
+            <p><b>Last Update:</b> {{ transaction.LastUpdate|date:"F d, Y" }}</p>
+            <p><b>Trade Allowed?:</b> {% if transaction.NoTradeAllowed == 0 %}Yes{% else %}No{% endif %}</p>
+            <p><b>Tax Exempt:</b> {% if transaction.TaxExempt == 0 %}No{% else %}Yes{% endif %}</p>
+            <p><b>Condition:</b> {{ transaction.ConditionID }}</p>
+        </div>
+        <div class="col-sm-6">
+            <p><b>Customer:</b> {{ transaction.CustomerID }}</p>
+            <p><b>Cash:</b> ${{ transaction.Cash|floatformat:2 }}</p>
+            <p><b>Check:</b> ${{ transaction.Check|floatformat:2 }}</p>
+            <p><b>Check Number:</b> {{ transaction.CheckNum }}</p>
+            <p><b>Gift Certificate:</b> {{ transaction.GiftCert }}</p>
+            <p><b>Description:</b> {{ transaction.Description }}</p>
+            <p><b>Tax Rate:</b> {{ transaction.TaxRate }}%</p>
+            <p><b>Sales Person:</b> {{ transaction.SalesPerson }}</p>
+            <p><b>Type:</b> {{ transaction.Type }}</p>
+            <p><b>Trade Cost:</b> {{ transaction.TradeCost }}</p>
+            <p><b>In/Out:</b> {{ transaction.InOut }}</p>
+            <p><b>Non Trade Y:</b> {{ transaction.NonTradeY }}</p>
+            <p><b>Labels:</b> {{ transaction.Labels }}</p>
+            <p><b>Date of Sale:</b> {{ transaction.DateOfSale|date:"F d, Y" }}</p>
+   
+            <a href="/transactions/update/{{ transaction.ID }}" class="btn btn-warning">Edit</a>
+            <a href="/transactions/delete/{{ transaction.ID }}" class="btn btn-danger text-light">Delete</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

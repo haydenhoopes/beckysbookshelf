@@ -1,0 +1,19 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Delete Author</legend>
+            <p>Note: <b> This action will delete the author permanently</b></p>
+            <p>Are you sure you want to delete the author {{ author.LastName }}, {{ author.FirstName }}?</p>
+            {{ form|crispy }}
+        </fieldset>
+        <div class="form-group">
+            <button  class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+            <a class="btn btn-muted" href="/authors/{{ author.AuthorID }}/">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

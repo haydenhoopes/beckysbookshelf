@@ -1,0 +1,57 @@
+{% extends "home/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <form method="POST" action='/authors/create/'>
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Create Book</legend>
+            <div class="row">
+                <div class="col-sm-6">
+                    <p><label to="title">Title</label>
+                    <input class="form-control" type="text" name="title" id="title"></p>
+    
+                    <p><label to="copyrightYear">Copyright Year</label>
+                    <input class="form-control" type="text" name="copyrightYear" id="copyrightYear"></p>
+
+                    <p><label to="ISBN">ISBN</label>
+                    <input class="form-control" type="text" name="ISBN" id="ISBN"></p>
+
+                    <label to="series">Series</label>
+                    <input class="form-control" type="text" name="series" placeholder="Start typing to search" id="seriesParent" list="series" oninput="getSeries()" autocomplete="off">
+                    <datalist id="series">
+                    </datalist>
+                    <p><a href="/series/create/" target="_blank">Add a new series</a></p>                    
+                </div>
+                <div class="col-sm-6">
+                    <label to="publisher">Publisher</label>
+                    <input class="form-control" type="text" name="publisher" placeholder="Start typing to search" id="publisherParent" list="publishers" oninput="getPublishers()" autocomplete="off">
+                    <datalist id="publishers">
+                    </datalist>
+                    <p><a href="/publishers/create/" target="_blank">Add a new publisher</a></p>                    
+
+                    <label to="author">Author</label>
+                    <input class="form-control" type="text" name="author" placeholder="Start typing to search" id="authorLastName" list="LastName" oninput="getAuthors()" autocomplete="off">
+                    <datalist id="LastName">
+                    </datalist>
+                    <p><a href="/authors/create/" target="_blank">Add a new author</a></p>                    
+
+                    <label to="topic">Topic</label>
+                    <input class="form-control" type="text" name="topic" placeholder="Start typing to search" id="topicParent" list="topics" oninput="getTopics()" autocomplete="off">
+                    <datalist id="topics">
+                    </datalist>
+                    <p><a href="/topics/create/" target="_blank">Add a new topic</a></p>                    
+
+
+                </div>
+            </div>
+
+        </fieldset>
+        <div class="form-group">
+            <button  class="btn btn-outline-primary" type="submit">Submit</button>
+            <a class="btn btn-outline-secondary" href="/browseall/">Browse all books</a>
+            <a class="text-muted m-2" style="float:right; cursor:pointer" id='cancel' onclick="window.history.back();">Cancel</a> 
+        </div>
+    </form>
+</div>
+{% endblock %}
