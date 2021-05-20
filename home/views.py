@@ -462,7 +462,9 @@ def topicInput(request):
         WHERE Topic LIKE '{topicInput}%'
         LIMIT 5;
     """
+    print(query)
     topics = Topics.objects.raw(query)
+    print(topics[0].Topic)
     topicList = []
     for topic in topics:
         topicList.append({'id': topic.TopicID, 'topic': topic.Topic})
