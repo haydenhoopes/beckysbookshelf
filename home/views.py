@@ -455,7 +455,8 @@ def topicInput(request):
     """
     print(query)
     topics = Topics.objects.raw(query)
-    
+    if topics is None:
+        print('\n\tTopics is none\n\n')
     topicList = []
     for topic in topics:
         topicList.append({'id': topic.TopicID, 'topic': topic.Topic})
