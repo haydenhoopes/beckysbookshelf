@@ -9,7 +9,7 @@ from .views import (
     SeriesListView, SeriesDeleteView, SeriesDetailView, SeriesUpdateView,
     CoverListView, CoverDetailView, CoverCreateView, CoverUpdateView, CoverDeleteView,
     CustomerListView, CustomerDetailView, CustomerUpdateView, CustomerDeleteView, BrowseBookListView,
-    ConditionListView, ConditionDetailView, ConditionUpdateView, ConditionDeleteView
+    ConditionListView, ConditionDetailView, ConditionUpdateView, ConditionDeleteView, ConditionCreateView
 )
 from . import views
 
