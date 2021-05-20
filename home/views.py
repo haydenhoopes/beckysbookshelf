@@ -399,10 +399,10 @@ class TransactionDeleteView(LoginRequiredMixin, DeleteView):
 # API views for AJAX queries
 def getBookData(request):
     query = '''
-        SELECT BookID, TO_CHAR(DateAdded, '%m') AS 'MonthAdded', TO_CHAR(DateAdded, '%Y') AS 'YearAdded', COUNT(*) AS 'COUNT'
+        SELECT BookID, TO_CHAR(DateAdded, 'Month') AS 'MonthAdded', TO_CHAR(DateAdded, 'YYYY') AS 'YearAdded', COUNT(*) AS 'COUNT'
         FROM home_books
         WHERE DateAdded >= date('now','start of month','-5 month')
-        GROUP BY TO_CHAR(DateAdded, '%Y'), TO_CHAR(DateAdded, '%m');
+        GROUP BY TO_CHAR(DateAdded, 'YYYY'), TO_CHAR(DateAdded, 'Month');
     '''
     with connection.cursor() as cursor:
         cursor.execute(query)
@@ -414,7 +414,7 @@ def getBookData(request):
 def getTransactionData(request):
     time = request.GET.get('time', "day")
     query = f'''
-        SELECT ID, SUM(Price), TO_CHAR(DateOfSale, '%Y'), TO_CHAR(DateOfSale, '%m'), TO_CHAR(DateOfSale, '%d')
+        SELECT ID, SUM(Price), TO_CHAR(DateOfSale, 'YYYY'), TO_CHAR(DateOfSale, 'Month'), TO_CHAR(DateOfSale, 'DD')
         FROM home_transactions
         WHERE DateOfSale >= DATE('now', '-7 {time}')
         GROUP BY DateOfSale
@@ -456,6 +456,9 @@ def topicInput(request):
     print(query)
     topics = Topics.objects.raw(query)
     print('\n\n'  + str(type(topics)) + '\n\n')
+    print('\n\n'  + str(len(topics)) + '\n\n')
+
+    print(topics)
     topicList = []
     for topic in topics:
         topicList.append({'id': topic.TopicID, 'topic': topic.Topic})
