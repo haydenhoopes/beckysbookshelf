@@ -450,11 +450,11 @@ def topicInput(request):
         topicInput = topicInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_topics
-        WHERE "Topic" LIKE '{topicInput}%'
+        WHERE "Topic" ILIKE %s
         LIMIT 5;
     """
     print(query)
-    topics = list(Topics.objects.raw(query))
+    topics = Topics.objects.raw(query, [topicInput + '%'])
     print('\n\n'  + str(type(topics)) + '\n\n')
     print('\n\n'  + str(len(list(topics))) + '\n\n')
 
