@@ -24,9 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'ky71qmbpo27gl@f7#*2tf^$qp*v7s$a9g$kr@(6jh18hu1*6bn'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['https://bbdevsite.herokuapp.com/', 'localhost']
+ALLOWED_HOSTS = [
+    'https://bbdevsite.herokuapp.com/', 
+    'localhost',
+    'beckysbookshelf.herokuapp.com',
+    'www.beckysbookshelf.com'
+    ]
 
 
 # Application definition
@@ -127,11 +132,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATICFILES_LOCATION = 'static'
-STATIC_URL = '/static/'
-STATIC_ROOT = 'static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'beckysbookshelf/static')
 ]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
