@@ -166,11 +166,12 @@ class BookCreateView(LoginRequiredMixin, CreateView):
 @login_required
 def bookCreateView(req):
     if req.method == "POST":
+        authorLast, authorFirst = req.POST.get("author").split(", ")
         a = Books(Title=req.POST.get("title", ""),
                 CopyrightYear=req.POST.get("copyrightYear", ""),
                 PublisherID=Publishers.objects.filter(Publisher=req.POST.get("publisher", 'N/A'))[0],
                 SeriesID=Series.objects.filter(Series=req.POST.get("series", 'None'))[0],
-                AuthorID=Authors.objects.filter(Q(LastName__icontains=req.POST.get("author", "N/A")) | Q(FirstName__icontains=req.POST.get("author", "N/A"))).order_by('LastName')[0],
+                AuthorID=Authors.objects.filter(Q(LastName__icontains=authorLast) | Q(FirstName__icontains=authorFirst)).order_by('LastName'),
                 TopicID=Topics.objects.filter(Topic=req.POST.get("topic", "N/A"))[0],
                 ISBN=req.POST.get("ISBN", "000000000")
                 )
