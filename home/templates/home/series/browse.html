@@ -25,6 +25,12 @@
               <th>Name</th>
                 <th class="d-none d-sm-none d-md-table-cell"></th>
             </tr>
+
+            {% if series|length < 1 %}
+            <p>No items matching that search were found.</p>
+            {% endif %}
+
+          
             {% for series in series %}
               <tr>
                 <td><input type="checkbox" class="form-check"></td>

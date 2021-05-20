@@ -25,6 +25,11 @@
               <th>Cover ID</th>
               <th>Cover Type</th>
             </tr>
+
+            {% if covers|length < 1 %}
+            <p>No items matching that search were found.</p>
+            {% endif %}
+            
             {% for cover in covers %}
               <tr>
                 <td><input type="checkbox" class="form-check"></td>

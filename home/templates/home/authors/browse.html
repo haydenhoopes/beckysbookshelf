@@ -26,6 +26,11 @@
               <th>Primary Topic</th>
                 <th class="d-none d-sm-none d-md-table-cell"></th>
             </tr>
+
+            {% if authors|length < 1 %}
+            <p>No items matching that search were found.</p>
+            {% endif %}
+
             {% for author in authors %}
               <tr>
                 <td><input type="checkbox" class="form-check"></td>

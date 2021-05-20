@@ -26,7 +26,12 @@
               <th>Phone Number</th>
                 <th class="d-none d-sm-none d-md-table-cell"></th>
             </tr>
-            {% for customer in customer %}
+
+            {% if customers|length < 1 %}
+            <p>No items matching that search were found.</p>
+            {% endif %}
+
+            {% for customer in customers %}
               <tr>
                 <td><input type="checkbox" class="form-check"></td>
                 <td><a href="/customers/{{customer.CustomerID}}/">{{ customer.LastName }}, {{ customer.FirstName }}</a></td>

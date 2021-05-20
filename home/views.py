@@ -674,7 +674,7 @@ class CustomerListView(LoginRequiredMixin, ListView):
 
     model = Customers
     template_name = 'home/customers/browse.html'
-    context_object_name = 'customer'
+    context_object_name = 'customers'
     paginate_by = 15
 class CustomerDetailView(LoginRequiredMixin, DetailView):
     login_url = '/login/'
