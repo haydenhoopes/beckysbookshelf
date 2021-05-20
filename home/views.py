@@ -99,30 +99,21 @@ def cogsReport(request, year):
 # The views for the books
 class BrowseBookListView(ListView):
     def get_queryset(self):
+        query = self.request.GET.get('book')
         q = '''
         SELECT b."BookID", t."ID", a."AuthorID", tp."TopicID", b."Title", TRIM(a."FirstName" || ' ' || a."LastName") AS "Author", tp."Topic" AS "Genre"
         FROM home_books AS "b" JOIN home_transactions AS "t" ON b."BookID" = t."BookID" JOIN home_authors AS "a" ON b."AuthorID" = a."AuthorID" JOIN home_topics AS "tp" ON b."TopicID" = tp."TopicID"
         WHERE b."BookID" != 0 AND b."BookID" != 1 AND b."BookID" != 2 AND b."BookID" != 44 AND b."BookID" != 66 AND b."BookID" != 138 AND b."BookID" != 412 AND b."BookID" != 444 AND b."BookID" != 23780 
-            AND b."BookID" != 74609 AND b."BookID" != 253302
+            AND b."BookID" != 74609 AND b."BookID" != 253302 {} 
         GROUP BY b."Title", tp."Topic", b."BookID", t."ID", a."AuthorID", tp."TopicID"
         HAVING SUM(t."Qty"*t."InOut") > 0
         ORDER BY 5;
         '''
         query = self.request.GET.get('book')
         if query is None:
-            return Books.objects.raw(q)
-            # with connection.cursor() as cursor:
-            #     cursor.execute(q)
-            #     result = cursor.fetchall()
-            #     rows = []
-            #     bookList = []
-            #     for book in result:
-            #         rows.append(book)
-            #     for row in rows:
-            #         bookList.append({'Title': row[0], 'Author': row[1], 'Genre': row[2]})
-            #     return json.dumps(bookList)
+            return Books.objects.raw(q.format(""))
         else:
-            return Books.objects.raw(q).filter(Title__icontains=query)
+            return Books.objects.raw(q.format('AND b."Title" ILIKE '+query))
 
     def get_context_data(self, **kwargs):
         query = self.request.GET.get('book')
