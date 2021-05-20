@@ -464,6 +464,7 @@ def topicInput(request):
     """
     topics = Topics.objects.raw(query)
     topicList = []
+    print(topics)
     for topic in topics:
         topicList.append({'id': topic.TopicID, 'topic': topic.Topic})
     return HttpResponse(json.dumps(topicList), 'application/json')
