@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 
 # Create your models here.
 class Topics(models.Model):
-    TopicID = models.IntegerField('TopicID', primary_key=True)
+    TopicID = models.AutoField('TopicID', primary_key=True)
     Topic = models.CharField('Topic', max_length=200, null=True)
     DateAdded = models.DateTimeField('DateAdded', null=False, default=timezone.now)
 
