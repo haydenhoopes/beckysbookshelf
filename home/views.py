@@ -171,7 +171,7 @@ def bookCreateView(req):
                 CopyrightYear=req.POST.get("copyrightYear", ""),
                 PublisherID=Publishers.objects.filter(Publisher=req.POST.get("publisher", 'N/A'))[0],
                 SeriesID=Series.objects.filter(Series=req.POST.get("series", 'None'))[0],
-                AuthorID=Authors.objects.filter(Q(LastName__icontains=authorLast) | Q(FirstName__icontains=authorFirst)).order_by('LastName'),
+                AuthorID=Authors.objects.filter(Q(LastName__icontains=authorLast) | Q(FirstName__icontains=authorFirst)).order_by('LastName')[0],
                 TopicID=Topics.objects.filter(Topic=req.POST.get("topic", "N/A"))[0],
                 ISBN=req.POST.get("ISBN", "000000000")
                 )
