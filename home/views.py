@@ -402,7 +402,7 @@ class TransactionDeleteView(LoginRequiredMixin, DeleteView):
 # API views for AJAX queries
 def getBookData(request):
     query = '''
-        SELECT "BookID", TO_CHAR("DateAdded", 'Month') AS MonthAdded, TO_CHAR("DateAdded", 'YYYY') AS YearAdded, COUNT(*) AS COUNT
+        SELECT TO_CHAR("DateAdded", 'Month') AS MonthAdded, TO_CHAR("DateAdded", 'YYYY') AS YearAdded, COUNT(*) AS COUNT
         FROM home_books
         WHERE "DateAdded" >= current_date - interval '5' month
         GROUP BY TO_CHAR("DateAdded", 'YYYY'), TO_CHAR("DateAdded", 'Month');
@@ -412,7 +412,7 @@ def getBookData(request):
         books = cursor.fetchall()
     bookList = []
     for book in books:
-        bookList.append({'id': book[0], 'MonthAdded': book[1], 'YearAdded': book[2], 'count': book[3]})
+        bookList.append({'MonthAdded': book[0], 'YearAdded': book[1], 'count': book[2]})
     return HttpResponse(json.dumps(bookList), 'application/json')
 def getTransactionData(request):
     time = request.GET.get('time', "day")
@@ -420,7 +420,7 @@ def getTransactionData(request):
         SELECT SUM("Price"), TO_CHAR("DateOfSale", 'YYYY') AS Year, TO_CHAR("DateOfSale", 'Month') AS Month, TO_CHAR("DateOfSale", 'DD') AS Day
         FROM home_transactions
         WHERE "DateOfSale" >= current_date - interval '7' {time}
-        GROUP BY "DateOfSale", "Year", "Month", "Day"
+        GROUP BY "DateOfSale"
         ORDER BY "DateOfSale";
     '''
     with connection.cursor() as cursor:
@@ -553,10 +553,10 @@ def seriesInput(request):
         seriesInput = seriesInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_series
-        WHERE "Series" ILIKE %s
+        WHERE "Series" ILIKE 't%'--%s
         LIMIT 5;
     """
-    series = Series.objects.raw(query, seriesInput+'%')
+    series = Series.objects.raw(query, [seriesInput+'%'])
     seriesList = []
     for s in series:
         seriesList.append({'id': s.SeriesID, 'series': s.Series})
