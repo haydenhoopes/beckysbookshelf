@@ -184,6 +184,7 @@ class BookUpdateView(LoginRequiredMixin, UpdateView):
     model = Books
     fields = ['Title', 'CopyrightYear', 'PublisherID', 'SeriesID', 'AuthorID', 'TopicID', 'ISBN']
     template_name = 'home/books/create.html'
+    success_url = '/browse/'    
 class BookDeleteView(LoginRequiredMixin, DeleteView):
     model = Books
     template_name = 'home/books/books_confirm_delete.html'
@@ -233,6 +234,7 @@ class AuthorUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['FirstName', 'LastName', 'PrimaryTopic', 'DateAdded']
     template_name = 'home/authors/create.html'
     context_object_name = 'author'
+    success_url = '/authors/'    
 class AuthorDeleteView(LoginRequiredMixin, DeleteView):
     model = Authors
     template_name = 'home/authors/authors_confirm_delete.html'
@@ -277,6 +279,7 @@ class TopicUpdateView(LoginRequiredMixin, UpdateView):
     fields = ['Topic', 'DateAdded']
     template_name = 'home/topics/create.html'
     context_object_name = 'topic'
+    success_url = '/topics/'
 class TopicDeleteView(LoginRequiredMixin, DeleteView):
     model = Topics
     template_name = 'home/topics/topics_confirm_delete.html'
@@ -414,10 +417,10 @@ def getBookData(request):
 def getTransactionData(request):
     time = request.GET.get('time', "day")
     query = f'''
-        SELECT "ID", SUM("Price"), TO_CHAR("DateOfSale", 'YYYY'), TO_CHAR("DateOfSale", 'Month'), TO_CHAR("DateOfSale", 'DD')
+        SELECT SUM("Price"), TO_CHAR("DateOfSale", 'YYYY') AS 'Year', TO_CHAR("DateOfSale", 'Month') AS 'Month', TO_CHAR("DateOfSale", 'DD') AS 'Day'
         FROM home_transactions
         WHERE "DateOfSale" >= current_date - interval '7' {time}
-        GROUP BY "DateOfSale"
+        GROUP BY "DateOfSale", "Year", "Month", "Day"
         ORDER BY "DateOfSale";
     '''
     with connection.cursor() as cursor:
@@ -426,7 +429,7 @@ def getTransactionData(request):
 
     transactionList = []
     for trans in transactions:
-        transactionList.append({'id': trans[0], 'price': trans[1], 'year': trans[2], 'month': trans[3], 'day': trans[4]})
+        transactionList.append({'price': trans[0], 'year': trans[1], 'month': trans[2], 'day': trans[3]})
     return HttpResponse(json.dumps(transactionList), 'application/json')
 def authorInput(request):
     lastnameInput = request.GET.get('text', '')
