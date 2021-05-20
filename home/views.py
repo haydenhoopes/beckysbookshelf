@@ -408,10 +408,10 @@ class TransactionDeleteView(LoginRequiredMixin, DeleteView):
 # API views for AJAX queries
 def getBookData(request):
     query = '''
-        SELECT BookID, strftime('%m', DateAdded) AS 'MonthAdded', strftime('%Y', DateAdded) AS 'YearAdded', COUNT(*) AS 'COUNT'
+        SELECT BookID, TO_CHAR(DateAdded, '%m') AS 'MonthAdded', TO_CHAR(DateAdded, '%Y') AS 'YearAdded', COUNT(*) AS 'COUNT'
         FROM home_books
         WHERE DateAdded >= date('now','start of month','-5 month')
-        GROUP BY strftime('%Y', DateAdded), strftime('%m', DateAdded);
+        GROUP BY TO_CHAR(DateAdded, '%Y'), TO_CHAR(DateAdded, '%m');
     '''
     with connection.cursor() as cursor:
         cursor.execute(query)
@@ -423,7 +423,7 @@ def getBookData(request):
 def getTransactionData(request):
     time = request.GET.get('time', "day")
     query = f'''
-        SELECT ID, SUM(Price), strftime('%Y', DateOfSale), strftime('%m', DateOfSale), strftime('%d', DateOfSale)
+        SELECT ID, SUM(Price), TO_CHAR(DateOfSale, '%Y'), TO_CHAR(DateOfSale, '%m'), TO_CHAR(DateOfSale, '%d')
         FROM home_transactions
         WHERE DateOfSale >= DATE('now', '-7 {time}')
         GROUP BY DateOfSale
@@ -464,7 +464,6 @@ def topicInput(request):
     """
     topics = Topics.objects.raw(query)
     topicList = []
-    print(topics)
     for topic in topics:
         topicList.append({'id': topic.TopicID, 'topic': topic.Topic})
     return HttpResponse(json.dumps(topicList), 'application/json')
@@ -527,7 +526,6 @@ def conditionInput(request):
         WHERE Condition LIKE '{conditionsInput}%'
         LIMIT 5;
     """
-    print(query)
     conditions = Conditions.objects.raw(query)
     conditionList = []
     for condition in conditions:
