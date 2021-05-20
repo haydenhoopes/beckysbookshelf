@@ -37,12 +37,12 @@ def cogsReport(request, year):
     new_year = str(year)
     beginning = '''
         SELECT 
-        (SELECT SUM("InOut"*"Price"*"Qty") AS 'All Inventory' 
+        (SELECT SUM("InOut"*"Price"*"Qty") AS "All Inventory" 
         FROM home_transactions 
-        WHERE ("Type" = 'Trade' OR "Type" = 'Purchase by Store') AND ("DateOfSale" BETWEEN '1992-12-31' AND (%s) || '-12-31')) + 
-        (SELECT SUM("InOut"*("Price"/2)*"Qty") 'All Sales' 
+        WHERE ("Type" = "Trade" OR "Type" = "Purchase by Store") AND ("DateOfSale" BETWEEN "1992-12-31" AND (%s) || "-12-31")) + 
+        (SELECT SUM("InOut"*("Price"/2)*"Qty") "All Sales" 
         FROM home_transactions 
-        WHERE "Type" = 'Sales' AND ("DateOfSale" BETWEEN '1992-12-31' AND (%s) || '-12-31')) 'Beginning Inventory'
+        WHERE "Type" = "Sales" AND ("DateOfSale" BETWEEN '1992-12-31' AND (%s) || '-12-31')) "Beginning Inventory"
     '''
     with connection.cursor() as cursor:
         cursor.execute(beginning % (old_year, old_year))
@@ -51,9 +51,9 @@ def cogsReport(request, year):
     for item in beg_inv:
         beg_dols.append(item[0])
     purchases = '''
-        SELECT SUM("InOut"*"Price"*"Qty") 'Purchases'
+        SELECT SUM("InOut"*"Price"*"Qty") "Purchases"
         FROM home_transactions
-        WHERE "DateOfSale" BETWEEN (%s) || '-01-01' AND (%s) || '-12-31' AND ("Type" = 'Purchase by Store' OR "Type" = 'Trade')
+        WHERE "DateOfSale" BETWEEN (%s) || '-01-01' AND (%s) || '-12-31' AND ("Type" = "Purchase by Store" OR "Type" = "Trade")
     '''
     with connection.cursor() as cursor:
         cursor.execute(purchases % (new_year, new_year))
@@ -63,12 +63,12 @@ def cogsReport(request, year):
         purchs.append(books[0])
     ending = '''
         SELECT 
-        (SELECT SUM(InOut*Price*Qty) 'All Inventory' 
+        (SELECT SUM(InOut*Price*Qty) "All Inventory" 
         FROM home_transactions 
-        WHERE (Type = 'Trade' OR Type = 'Purchase by Store') AND (DateOfSale BETWEEN '1992-12-31' AND (%s) || '-12-31')) + 
-        (SELECT SUM(InOut*(Price/2)*Qty) 'All Sales' 
+        WHERE (Type = "Trade" OR Type = "Purchase by Store") AND (DateOfSale BETWEEN '1992-12-31' AND (%s) || '-12-31')) + 
+        (SELECT SUM(InOut*(Price/2)*Qty) "All Sales" 
         FROM home_transactions 
-        WHERE Type = 'Sales' AND (DateOfSale BETWEEN '1992-12-31' AND (%s) || '-12-31')) 'Ending Inventory'
+        WHERE Type = "Sales" AND (DateOfSale BETWEEN '1992-12-31' AND (%s) || '-12-31')) "Ending Inventory"
     '''
     with connection.cursor() as cursor:
         cursor.execute(ending % (new_year, new_year))
