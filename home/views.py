@@ -553,7 +553,7 @@ def seriesInput(request):
         seriesInput = seriesInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_series
-        WHERE "Series" ILIKE 't%'--%s
+        WHERE "Series" ILIKE %s
         LIMIT 5;
     """
     series = Series.objects.raw(query, [seriesInput+'%'])
