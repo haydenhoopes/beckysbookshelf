@@ -402,7 +402,7 @@ class TransactionDeleteView(LoginRequiredMixin, DeleteView):
 # API views for AJAX queries
 def getBookData(request):
     query = '''
-        SELECT "BookID", TO_CHAR("DateAdded", 'Month') AS 'MonthAdded', TO_CHAR("DateAdded", 'YYYY') AS 'YearAdded', COUNT(*) AS 'COUNT'
+        SELECT "BookID", TO_CHAR("DateAdded", 'Month') AS MonthAdded, TO_CHAR("DateAdded", 'YYYY') AS YearAdded, COUNT(*) AS COUNT
         FROM home_books
         WHERE "DateAdded" >= current_date - interval '5' month
         GROUP BY TO_CHAR("DateAdded", 'YYYY'), TO_CHAR("DateAdded", 'Month');
@@ -417,7 +417,7 @@ def getBookData(request):
 def getTransactionData(request):
     time = request.GET.get('time', "day")
     query = f'''
-        SELECT SUM("Price"), TO_CHAR("DateOfSale", 'YYYY') AS 'Year', TO_CHAR("DateOfSale", 'Month') AS 'Month', TO_CHAR("DateOfSale", 'DD') AS 'Day'
+        SELECT SUM("Price"), TO_CHAR("DateOfSale", 'YYYY') AS Year, TO_CHAR("DateOfSale", 'Month') AS Month, TO_CHAR("DateOfSale", 'DD') AS Day
         FROM home_transactions
         WHERE "DateOfSale" >= current_date - interval '7' {time}
         GROUP BY "DateOfSale", "Year", "Month", "Day"
