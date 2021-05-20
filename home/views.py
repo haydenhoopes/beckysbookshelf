@@ -109,11 +109,11 @@ class BrowseBookListView(ListView):
         HAVING SUM(t."Qty"*t."InOut") > 0
         ORDER BY 5;
         '''
-        query = self.request.GET.get('book')
+        query = self.request.GET.get('book').replace("'","")
         if query is None:
             return Books.objects.raw(q.format(""))
         else:
-            return Books.objects.raw(q.format('AND b."Title" ILIKE '+query))
+            return Books.objects.raw(q.format('AND b."Title" ILIKE \''+ query + '\''))
 
     def get_context_data(self, **kwargs):
         query = self.request.GET.get('book')
