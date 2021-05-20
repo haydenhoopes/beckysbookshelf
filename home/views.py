@@ -100,8 +100,8 @@ def cogsReport(request, year):
 class BrowseBookListView(ListView):
     def get_queryset(self):
         q = '''
-        SELECT b.BookID, t.ID, a.AuthorID, tp.TopicID, b.Title, TRIM(a.FirstName || ' ' || a.LastName) 'Author', tp.Topic 'Genre'
-        FROM home_books b JOIN home_transactions t ON b.BookID = t.BookID JOIN home_authors a ON b.AuthorID = a.AuthorID JOIN home_topics tp ON b.TopicID = tp.TopicID
+        SELECT b.BookID, t.ID, a.AuthorID, tp.TopicID, b.Title, TRIM(a.FirstName || ' ' || a.LastName) AS "Author", tp.Topic AS "Genre"
+        FROM home_books AS "b" JOIN home_transactions AS "t" ON b.BookID = t.BookID JOIN home_authors AS "a" ON b.AuthorID = a.AuthorID JOIN home_topics AS "tp" ON b.TopicID = tp.TopicID
         WHERE b.BookID != 0 AND b.BookID != 1 AND b.BookID != 2 AND b.BookID != 44 AND b.BookID != 66 AND b.BookID != 138 AND b.BookID != 412 AND b.BookID != 444 AND b.BookID != 23780 
             AND b.BookID != 74609 AND b.BookID != 253302
         GROUP BY b.Title, tp.Topic
