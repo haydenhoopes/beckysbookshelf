@@ -4,10 +4,8 @@ from django.contrib import admin, messages
 from django.db.models import Q
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 from .models import *
-from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.db import connection
-from django import forms
 import json
 import io
 from django.http import FileResponse
@@ -171,9 +169,9 @@ def bookCreateView(req):
         a = Books(Title=req.POST.get("title", ""),
                 CopyrightYear=req.POST.get("copyrightYear", ""),
                 PublisherID=Publishers.objects.filter(Publisher=req.POST.get("publisher", 'N/A'))[0],
-                SeriesID=Series.objects.filter(Series=req.POST.get("series", 'None')),
-                AuthorID=Authors.objects.filter(Q(LastName__icontains=req.POST.get("author", "N/A")) | Q(FirstName__icontains=req.POST.get("author", "N/A"))).order_by('LastName'),
-                TopicID=Topics.objects.filter(Topic=req.POST.get("topic", "N/A")),
+                SeriesID=Series.objects.filter(Series=req.POST.get("series", 'None'))[0],
+                AuthorID=Authors.objects.filter(Q(LastName__icontains=req.POST.get("author", "N/A")) | Q(FirstName__icontains=req.POST.get("author", "N/A"))).order_by('LastName')[0],
+                TopicID=Topics.objects.filter(Topic=req.POST.get("topic", "N/A"))[0],
                 ISBN=req.POST.get("ISBN", "000000000")
                 )
         a.save()
@@ -231,7 +229,7 @@ def authorCreateView(req):
     return render(req, 'home/authors/_create.html')    
 class AuthorUpdateView(LoginRequiredMixin, UpdateView):
     model = Authors
-    fields = ['FirstName', 'LastName', 'PrimaryTopic', 'DateAdded']
+    fields = ['FirstName', 'LastName', 'PrimaryTopic']
     template_name = 'home/authors/create.html'
     context_object_name = 'author'
     success_url = '/authors/'    
@@ -471,7 +469,7 @@ def bookInput(request):
         return HttpResponse(json.dumps([]), 'application/json')
     if "'" in bookInput:
         bookInput = bookInput.replace("'", "''")
-    query = f"""
+    query = """
         SELECT * FROM home_books
         WHERE "Title" ILIKE %s
         LIMIT 5;

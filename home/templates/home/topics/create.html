@@ -16,6 +16,9 @@
     </form>
 </div>
 <script>
-    $("#id_DateAdded").attr("type") = 'date';
+    let dateAdded = $("#id_DateAdded");
+    let date = new Date(dateAdded.val()).toISOString().slice(0, 10);;
+    dateAdded.attr("type", "date");
+    dateAdded.val(date)
 </script>
 {% endblock %}
