@@ -14,14 +14,14 @@ class Topics(models.Model):
         return self.Topic
 
 class Publishers(models.Model):
-    PublisherID = models.IntegerField('PublisherID', primary_key=True)
+    PublisherID = models.BigAutoField('PublisherID', primary_key=True)
     Publisher = models.CharField('Publisher', max_length=255, null=True)
 
     def __str__(self):
         return self.Publisher
 
 class Series(models.Model):
-    SeriesID = models.IntegerField('SeriesID', primary_key=True)
+    SeriesID = models.BigAutoField('SeriesID', primary_key=True)
     Series = models.CharField('Series', max_length=255, null=True)
     DateAdded = models.DateTimeField('DateAdded', null=True, default=timezone.now)
 
@@ -29,27 +29,27 @@ class Series(models.Model):
         return self.Series
 
 class Conditions(models.Model):
-    ConditionID = models.IntegerField('ConditionID', primary_key=True)
+    ConditionID = models.BigAutoField('ConditionID', primary_key=True)
     Condition = models.CharField('Condition', max_length=255, null=True)
 
     def __str__(self):
         return self.Condition
 
 class CoverType(models.Model):
-    CoverID = models.IntegerField('CoverID', primary_key=True)
+    CoverID = models.BigAutoField('CoverID', primary_key=True)
     Cover = models.CharField('Cover', max_length=255, null=True)
     def __str__(self):
         return self.Cover
 
 class SmallShelfSigns(models.Model):
-    SignID = models.IntegerField('SignID', primary_key=True)
+    SignID = models.BigAutoField('SignID', primary_key=True)
     Description = models.CharField('Description', max_length=255, null=True)
 
     def __str__(self):
         return self.Description
 
 class Customers(models.Model):
-    CustomerID = models.IntegerField(primary_key=True)
+    CustomerID = models.BigAutoField(primary_key=True)
     FirstName = models.CharField(max_length=255, null=True)
     LastName = models.CharField(max_length=255, null=False)
     Address = models.CharField(max_length=255, null=True)
@@ -64,7 +64,7 @@ class Customers(models.Model):
         return self.LastName + ", " + self.FirstName
 
 class Authors(models.Model):
-    AuthorID = models.IntegerField('AuthorID', primary_key=True, db_column='AuthorID')
+    AuthorID = models.BigAutoField('AuthorID', primary_key=True, db_column='AuthorID')
     FirstName = models.CharField(max_length=255, null=True)
     LastName = models.CharField(max_length=255, null=False)
     PrimaryTopic = models.ForeignKey(to=Topics,on_delete=models.CASCADE, db_column='PrimaryTopic', db_constraint=False)
@@ -76,7 +76,7 @@ class Authors(models.Model):
         return reverse('browse')
 
 class Books(models.Model):
-    BookID = models.IntegerField('BookID', primary_key=True, db_column='BookID')
+    BookID = models.BigAutoField('BookID', primary_key=True, db_column='BookID')
     Title = models.CharField('Title', max_length=255, null=True)
     CopyrightYear = models.CharField('CopyrightYear', max_length=255, null=True)
     PublisherID = models.ForeignKey(to=Publishers, on_delete=models.CASCADE, db_column='PublisherID', db_constraint=False)
@@ -93,7 +93,7 @@ class Books(models.Model):
         return reverse('browse')
 
 class Transactions(models.Model):
-    ID = models.IntegerField(primary_key=True)
+    ID = models.BigAutoField(primary_key=True)
     BookID = models.ForeignKey(to=Books, on_delete=models.CASCADE, db_column='BookID', db_constraint=False)
     Price = models.FloatField(null=True)
     Resale = models.FloatField(null=True)
