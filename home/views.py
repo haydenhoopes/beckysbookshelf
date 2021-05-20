@@ -401,7 +401,7 @@ def getBookData(request):
     query = '''
         SELECT "BookID", TO_CHAR("DateAdded", 'Month') AS 'MonthAdded', TO_CHAR("DateAdded", 'YYYY') AS 'YearAdded', COUNT(*) AS 'COUNT'
         FROM home_books
-        WHERE "DateAdded" >= date('now','start of month','-5 month')
+        WHERE "DateAdded" >= current_date - interval '5' month
         GROUP BY TO_CHAR("DateAdded", 'YYYY'), TO_CHAR("DateAdded", 'Month');
     '''
     with connection.cursor() as cursor:
@@ -416,7 +416,7 @@ def getTransactionData(request):
     query = f'''
         SELECT "ID", SUM("Price"), TO_CHAR("DateOfSale", 'YYYY'), TO_CHAR("DateOfSale", 'Month'), TO_CHAR("DateOfSale", 'DD')
         FROM home_transactions
-        WHERE "DateOfSale" >= DATE('now', '-7 {time}')
+        WHERE "DateOfSale" >= current_date - interval '7' {time}
         GROUP BY "DateOfSale"
         ORDER BY "DateOfSale";
     '''
@@ -434,10 +434,10 @@ def authorInput(request):
         return HttpResponse(json.dumps([]), 'application/json')
     query = f'''
         SELECT * FROM home_authors
-        WHERE "LastName" LIKE '{lastnameInput}%'
+        WHERE "LastName" ILIKE %s OR "FirstName" ILIKE %s
         LIMIT 5;
     '''
-    authors = Authors.objects.raw(query)
+    authors = Authors.objects.raw(query, [lastnameInput + '%', lastnameInput + '%'])
     authorList = []
     for author in authors:
         authorList.append({'id': author.AuthorID, 'firstName': author.FirstName, 'lastName': author.LastName})
@@ -470,10 +470,10 @@ def bookInput(request):
         bookInput = bookInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_books
-        WHERE "Title" LIKE '{bookInput}%'
+        WHERE "Title" ILIKE %s
         LIMIT 5;
     """
-    books = Books.objects.raw(query)
+    books = Books.objects.raw(query, [bookInput + '%'])
     bookList = []
     for book in books:
         bookList.append({'id': book.BookID, 'title': book.Title})
@@ -486,10 +486,10 @@ def customerInput(request):
         customerInput = customerInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_customers
-        WHERE "LastName" LIKE '{customerInput}%' OR "FirstName" LIKE '{customerInput}%'
+        WHERE "LastName" ILIKE %s OR "FirstName" ILIKE %s
         LIMIT 5;
     """
-    customers = Customers.objects.raw(query)
+    customers = Customers.objects.raw(query, [customerInput + '%', customerInput + '%'])
     customerList = []
     for customer in customers:
         customerList.append({'id': customer.CustomerID, 'firstName': customer.FirstName, 'lastName': customer.LastName})
@@ -502,10 +502,10 @@ def coverInput(request):
         coverInput = coverInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_covertype
-        WHERE "Cover" LIKE '{coverInput}%'
+        WHERE "Cover" ILIKE %s
         LIMIT 5;
     """
-    covers = CoverType.objects.raw(query)
+    covers = CoverType.objects.raw(query, [coverInput + '%'])
     coverList = []
     for cover in covers:
         coverList.append({'id': cover.CoverID, 'cover': cover.Cover})
@@ -518,10 +518,10 @@ def conditionInput(request):
         conditionsInput = conditionsInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_conditions
-        WHERE "Condition" LIKE '{conditionsInput}%'
+        WHERE "Condition" ILIKE %s
         LIMIT 5;
     """
-    conditions = Conditions.objects.raw(query)
+    conditions = Conditions.objects.raw(query, [conditionsInput+'%'])
     conditionList = []
     for condition in conditions:
         conditionList.append({'id': condition.ConditionID, 'condition': condition.Condition})
@@ -534,10 +534,10 @@ def publisherInput(request):
         publisherInput = publisherInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_publishers
-        WHERE "Publisher" LIKE '{publisherInput}%'
+        WHERE "Publisher" ILIKE %s
         LIMIT 5;
     """
-    publishers = Publishers.objects.raw(query)
+    publishers = Publishers.objects.raw(query, [publisherInput+'%'])
     publisherList = []
     for publisher in publishers:
         publisherList.append({'id': publisher.PublisherID, 'publisher': publisher.Publisher})
@@ -550,10 +550,10 @@ def seriesInput(request):
         seriesInput = seriesInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_series
-        WHERE "Series" LIKE '{seriesInput}%'
+        WHERE "Series" ILIKE %s
         LIMIT 5;
     """
-    series = Series.objects.raw(query)
+    series = Series.objects.raw(query, seriesInput+'%')
     seriesList = []
     for s in series:
         seriesList.append({'id': s.SeriesID, 'series': s.Series})
