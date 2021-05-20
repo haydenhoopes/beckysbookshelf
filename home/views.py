@@ -399,10 +399,10 @@ class TransactionDeleteView(LoginRequiredMixin, DeleteView):
 # API views for AJAX queries
 def getBookData(request):
     query = '''
-        SELECT BookID, TO_CHAR(DateAdded, 'Month') AS 'MonthAdded', TO_CHAR(DateAdded, 'YYYY') AS 'YearAdded', COUNT(*) AS 'COUNT'
+        SELECT "BookID", TO_CHAR("DateAdded", 'Month') AS 'MonthAdded', TO_CHAR("DateAdded", 'YYYY') AS 'YearAdded', COUNT(*) AS 'COUNT'
         FROM home_books
-        WHERE DateAdded >= date('now','start of month','-5 month')
-        GROUP BY TO_CHAR(DateAdded, 'YYYY'), TO_CHAR(DateAdded, 'Month');
+        WHERE "DateAdded" >= date('now','start of month','-5 month')
+        GROUP BY TO_CHAR("DateAdded", 'YYYY'), TO_CHAR("DateAdded", 'Month');
     '''
     with connection.cursor() as cursor:
         cursor.execute(query)
@@ -414,11 +414,11 @@ def getBookData(request):
 def getTransactionData(request):
     time = request.GET.get('time', "day")
     query = f'''
-        SELECT ID, SUM(Price), TO_CHAR(DateOfSale, 'YYYY'), TO_CHAR(DateOfSale, 'Month'), TO_CHAR(DateOfSale, 'DD')
+        SELECT "ID", SUM("Price"), TO_CHAR("DateOfSale", 'YYYY'), TO_CHAR("DateOfSale", 'Month'), TO_CHAR("DateOfSale", 'DD')
         FROM home_transactions
-        WHERE DateOfSale >= DATE('now', '-7 {time}')
-        GROUP BY DateOfSale
-        ORDER BY DateOfSale;
+        WHERE "DateOfSale" >= DATE('now', '-7 {time}')
+        GROUP BY "DateOfSale"
+        ORDER BY "DateOfSale";
     '''
     with connection.cursor() as cursor:
         cursor.execute(query)
@@ -434,7 +434,7 @@ def authorInput(request):
         return HttpResponse(json.dumps([]), 'application/json')
     query = f'''
         SELECT * FROM home_authors
-        WHERE LastName LIKE '{lastnameInput}%'
+        WHERE "LastName" LIKE '{lastnameInput}%'
         LIMIT 5;
     '''
     authors = Authors.objects.raw(query)
@@ -450,7 +450,7 @@ def topicInput(request):
         topicInput = topicInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_topics
-        WHERE Topic LIKE '{topicInput}%'
+        WHERE "Topic" LIKE '{topicInput}%'
         LIMIT 5;
     """
     print(query)
@@ -471,7 +471,7 @@ def bookInput(request):
         bookInput = bookInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_books
-        WHERE Title LIKE '{bookInput}%'
+        WHERE "Title" LIKE '{bookInput}%'
         LIMIT 5;
     """
     books = Books.objects.raw(query)
@@ -487,7 +487,7 @@ def customerInput(request):
         customerInput = customerInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_customers
-        WHERE LastName LIKE '{customerInput}%'
+        WHERE "LastName" LIKE '{customerInput}%' OR "FirstName" LIKE '{customerInput}%'
         LIMIT 5;
     """
     customers = Customers.objects.raw(query)
@@ -503,7 +503,7 @@ def coverInput(request):
         coverInput = coverInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_covertype
-        WHERE Cover LIKE '{coverInput}%'
+        WHERE "Cover" LIKE '{coverInput}%'
         LIMIT 5;
     """
     covers = CoverType.objects.raw(query)
@@ -519,7 +519,7 @@ def conditionInput(request):
         conditionsInput = conditionsInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_conditions
-        WHERE Condition LIKE '{conditionsInput}%'
+        WHERE "Condition" LIKE '{conditionsInput}%'
         LIMIT 5;
     """
     conditions = Conditions.objects.raw(query)
@@ -535,7 +535,7 @@ def publisherInput(request):
         publisherInput = publisherInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_publishers
-        WHERE Publisher LIKE '{publisherInput}%'
+        WHERE "Publisher" LIKE '{publisherInput}%'
         LIMIT 5;
     """
     publishers = Publishers.objects.raw(query)
@@ -551,7 +551,7 @@ def seriesInput(request):
         seriesInput = seriesInput.replace("'", "''")
     query = f"""
         SELECT * FROM home_series
-        WHERE Series LIKE '{seriesInput}%'
+        WHERE "Series" LIKE '{seriesInput}%'
         LIMIT 5;
     """
     series = Series.objects.raw(query)
