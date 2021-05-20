@@ -183,7 +183,7 @@ class BookUpdateView(LoginRequiredMixin, UpdateView):
     model = Books
     fields = ['Title', 'CopyrightYear', 'PublisherID', 'SeriesID', 'AuthorID', 'TopicID', 'ISBN']
     template_name = 'home/books/create.html'
-    success_url = '/browse/'    
+    success_url = '/browseall/'    
 class BookDeleteView(LoginRequiredMixin, DeleteView):
     model = Books
     template_name = 'home/books/books_confirm_delete.html'
@@ -761,3 +761,52 @@ class CoverDeleteView(LoginRequiredMixin, DeleteView):
     template_name = 'home/covers/covers_confirm_delete.html'
     success_url = "/covers/"
     context_object_name = 'cover'
+
+# The views for the conditions
+class ConditionListView(ListView):
+    def get_queryset(self):
+        query = self.request.GET.get('condition')
+        if query is None:
+            return Conditions.objects.order_by('Condition')
+        else:
+            return Conditions.objects.filter(Condition__icontains=query).order_by('Condition')
+
+    def get_context_data(self, **kwargs):   
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the books
+        previousQuery = self.request.GET.get('condition')
+        if previousQuery is None:
+            context['previousQuery'] = ""
+        else:
+            context['previousQuery'] = previousQuery
+        return context
+
+    model = Conditions
+    template_name = 'home/conditions/browse.html'
+    context_object_name = 'conditions'
+    paginate_by = 12
+class ConditionDetailView(LoginRequiredMixin, DetailView):
+    login_url = '/login/'
+    redirect_field_name = 'redirect_to'
+    model = Conditions
+    template_name = 'home/conditions/detail.html'
+    context_object_name = 'condition'
+class ConditionCreateView(LoginRequiredMixin, CreateView):
+    login_url = '/login/'
+    model = Conditions
+    fields = ['Condition']
+    template_name = 'home/conditions/create.html'
+    success_url = '/conditions/' 
+class ConditionUpdateView(LoginRequiredMixin, UpdateView):
+    login_url = '/login/'
+    model = Conditions
+    fields = ['Condition']
+    template_name = 'home/conditions/create.html'
+    success_url = '/conditions/'
+class ConditionDeleteView(LoginRequiredMixin, DeleteView):
+    login_url = '/login/'
+    model = Conditions
+    template_name = 'home/conditions/conditions_confirm_delete.html'
+    success_url = "/conditions/"
+    context_object_name = 'condition'

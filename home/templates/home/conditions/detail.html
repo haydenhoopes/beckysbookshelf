@@ -1,0 +1,11 @@
+{% extends "home/base.html" %}
+{% block content %}
+<div style="margin: auto;" class="p-3 m-4 bg-white">
+    <h2>{{ condition.Condition}}</h2>
+    <p><small>ID No. {{condition.ConditionID}}</small></p>
+            <p><b>Condition Type:</b> {{ condition.Condition }}</p><br>
+            
+                <a href="/conditions/update/{{ condition.ConditionID }}" class="btn btn-warning">Edit</a>
+                <a href="/conditions/delete/{{ condition.ConditionID }}" class="btn btn-danger text-light">Delete</a>
+</div>
+{% endblock content %}

@@ -8,7 +8,8 @@ from .views import (
     PublisherListView, PublisherDetailView, PublisherCreateView, PublisherUpdateView, PublisherDeleteView, 
     SeriesListView, SeriesDeleteView, SeriesDetailView, SeriesUpdateView,
     CoverListView, CoverDetailView, CoverCreateView, CoverUpdateView, CoverDeleteView,
-    CustomerListView, CustomerDetailView, CustomerUpdateView, CustomerDeleteView, BrowseBookListView
+    CustomerListView, CustomerDetailView, CustomerUpdateView, CustomerDeleteView, BrowseBookListView,
+    ConditionListView, ConditionDetailView, ConditionUpdateView, ConditionDeleteView
 )
 from . import views
 
@@ -95,6 +96,13 @@ urlpatterns = [
     path('covers/create/', CoverCreateView.as_view(), name='covers-create'),
     path('covers/update/<int:pk>/', CoverUpdateView.as_view(), name='covers-update'),
     path('covers/delete/<int:pk>/', CoverDeleteView.as_view(), name='covers-delete'),
+
+    # Conditions routes
+    path('conditions/', ConditionListView.as_view(), name="conditions"),
+    path('conditions/<int:pk>/', ConditionDetailView.as_view(), name="conditions-detail"),
+    path('conditions/create/', ConditionCreateView.as_view(), name='conditions-create'),
+    path('conditions/update/<int:pk>/', ConditionUpdateView.as_view(), name='conditions-update'),
+    path('conditions/delete/<int:pk>/', ConditionDeleteView.as_view(), name='conditions-delete'),
 ]
 
 # app/model_viewtype.html
