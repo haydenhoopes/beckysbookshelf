@@ -76,21 +76,25 @@ function getTopics() {
 }
 
 function getAuthors() {
-        let text = document.getElementById('authorLastName').value;
-        $.ajax({
-            url: `/api/authorInput/?text=${text}`,
-            method: "GET",
-            success: function(authors) {
-                $('#LastName').empty();
-                let datalist = $("#LastName")
-                for (a of authors) {
-                    datalist.append(`<option value='${a.lastName}, ${a.firstName}'></option>`)
+        let authorLastName = $("#authorLastName");
+        let text = authorLastName.val();
+        if (authorLastName.attr("data-last") != text) {
+            $.ajax({
+                url: `/api/authorInput/?text=${text}`,
+                method: "GET",
+                success: function(authors) {
+                    authorLastName.attr("data-last", text)
+                    $('#LastName').empty();
+                    let datalist = $("#LastName")
+                    for (a of authors) {
+                        datalist.append(`<option value='${a.lastName}, ${a.firstName}'></option>`)
+                    }
+                },
+                error: (e, r, s) => {
+                    console.log(s);
                 }
-            },
-            error: (e, r, s) => {
-                console.log(s);
-            }
-    });
+            });
+        }  
 }
 
 function getBooks() {

@@ -2,14 +2,15 @@
 {% load static %}
 {% block content %}
     <!-- The search part -->
-    <div class="container-fluid text-center p-8">
-      <h3 style="color:white" class="margin margin pt-3">Search for a book</h3>
+    <div class="container-fluid text-center py-4 bg-white my-3">
+      <p><h1 style="font-family:'Times New Roman', Times, serif; font-size:60px;">Becky's Bookshelf</h1></p>
+      <h3 class="margin margin pt-3">Search for a book</h3>
       <div style="max-width: 500px; margin: auto;">
         <form action="/browse/" method="GET">
           <input style="display: inline; max-width: 230px;" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="book">
           <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
         </form>
-        <p style="color:white; margin-top: 15px;">Or <a href="./browse/">browse</a> the books we have in stock.</p>
+        <p style="margin-top: 15px;">Or <a href="./browse/">browse</a> the books we have in stock.</p>
       </div>
     </div>
 
