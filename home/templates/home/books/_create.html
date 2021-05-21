@@ -9,35 +9,35 @@
             <div class="row">
                 <div class="col-sm-6">
                     <p><label to="title">Title</label>
-                    <input class="form-control" type="text" name="title" id="title" required></p>
+                    <input class="form-control" type="text" name="title" id="title" required {% if book %} value="{{ book.Title }}" {% endif %}></p>
     
                     <p><label to="copyrightYear">Copyright Year</label>
-                    <input class="form-control" type="text" name="copyrightYear" id="copyrightYear" required></p>
+                    <input class="form-control" type="text" name="copyrightYear" id="copyrightYear" required {% if book %} value="{{ book.CopyrightYear }}" {% endif %}></p>
 
                     <p><label to="ISBN">ISBN</label>
-                    <input class="form-control" type="text" name="ISBN" id="ISBN" required></p>
+                    <input class="form-control" type="text" name="ISBN" id="ISBN" {% if book %} value="{{ book.ISBN }}" {% endif %} required></p>
 
                     <label to="series">Series</label>
-                    <input class="form-control" type="text" name="series" placeholder="Start typing to search" id="seriesParent" list="series" oninput="getSeries()" autocomplete="off" required>
+                    <input class="form-control" type="text" name="series" {% if book %} value="{{ book.SeriesID }}" {% endif %} placeholder="Start typing to search" id="seriesParent" list="series" oninput="getSeries()" autocomplete="off" required>
                     <datalist id="series">
                     </datalist>
                     <p><a href="/series/create/" target="_blank">Add a new series</a></p>                    
                 </div>
                 <div class="col-sm-6">
                     <label to="publisher">Publisher</label>
-                    <input class="form-control" type="text" name="publisher" placeholder="Start typing to search" id="publisherParent" list="publishers" oninput="getPublishers()" autocomplete="off" required>
+                    <input class="form-control" type="text" name="publisher" placeholder="Start typing to search" {% if book %} value="{{ book.PublisherID }}" {% endif %} id="publisherParent" list="publishers" oninput="getPublishers()" autocomplete="off" required>
                     <datalist id="publishers">
                     </datalist>
                     <p><a href="/publishers/create/" target="_blank">Add a new publisher</a></p>                    
 
                     <label to="author">Author</label>
-                    <input class="form-control" type="text" name="author" placeholder="Start typing to search" id="authorLastName" list="LastName" oninput="getAuthors()" autocomplete="off" required>
+                    <input class="form-control" type="text" name="author" placeholder="Start typing to search" {% if book %} value="{{ book.AuthorID }}" {% endif %} id="authorLastName" list="LastName" oninput="getAuthors()" autocomplete="off" required>
                     <datalist id="LastName">
                     </datalist>
                     <p><a href="/authors/create/" target="_blank">Add a new author</a></p>                    
 
                     <label to="topic">Topic</label>
-                    <input class="form-control" type="text" name="topic" placeholder="Start typing to search" id="topicParent" list="topics" oninput="getTopics()" autocomplete="off" required>
+                    <input class="form-control" type="text" name="topic" placeholder="Start typing to search" {% if book %} value="{{ book.TopicID }}" {% endif %} id="topicParent" list="topics" oninput="getTopics()" autocomplete="off" required>
                     <datalist id="topics">
                     </datalist>
                     <p><a href="/topics/create/" target="_blank">Add a new topic</a></p>                    

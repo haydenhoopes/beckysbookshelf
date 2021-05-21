@@ -58,183 +58,163 @@
 <script>
      $("#flashMessages").delay(5000).fadeOut()
 function getTopics() {
-        let topicParent = $("#topicParent");
-        let text = topicParent.val();
-        if (topicParent.attr("data-last") != text) {
-            $.ajax({
-                url: `/api/topicInput/?text=${text}`,
-                method: "GET",
-                success: function(topics) {
-                    topicParent.attr("data-last", text)
-                    $('#topics').empty();
-                    let datalist = $("#topics")
-                    for (t of topics) {
+        let text = document.getElementById('topicParent').value;
+        $.ajax({
+            url: `/api/topicInput/?text=${text}`,
+            method: "GET",
+            success: function(topics) {
+                $('#topics').empty();
+                let datalist = $("#topics")
+                for (t of topics) {
+                    if (t.topic != text) {
                         datalist.append(`<option value="${t.topic}"></option>`);
                     }
-                },
-                error: (e, r, s) => {
-                    console.log(s);
                 }
-        });
-    }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
 }
 
 function getAuthors() {
-        let authorLastName = $("#authorLastName");
-        let text = authorLastName.val();
-        if (authorLastName.attr("data-last") != text) {
-            $.ajax({
-                url: `/api/authorInput/?text=${text}`,
-                method: "GET",
-                success: function(authors) {
-                    authorLastName.attr("data-last", text)
-                    $('#LastName').empty();
-                    let datalist = $("#LastName")
-                    for (a of authors) {
-                        datalist.append(`<option value='${a.lastName}, ${a.firstName}'></option>`)
-                    }
-                },
-                error: (e, r, s) => {
-                    console.log(s);
+        let text = document.getElementById('authorLastName').value;
+        $.ajax({
+            url: `/api/authorInput/?text=${text}`,
+            method: "GET",
+            success: function(authors) {
+                $('#LastName').empty();
+                let datalist = $("#LastName")
+                for (a of authors) {
+                    datalist.append(`<option value='${a.lastName}, ${a.firstName}'></option>`)
                 }
-            });
-        }  
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
 }
 
 function getBooks() {
-        let bookParent = $("#bookParent");
-        let text = bookParent.val();
-        if (bookParent.attr("data-last") != text) {
-            $.ajax({
-                url: `/api/bookInput/?text=${text}`,
-                method: "GET",
-                success: function(books) {
-                    bookParent.attr("data-last", text)
-                    $('#books').empty();
-                    let datalist = $("#books")
-                    for (b of books) {
+        let text = document.getElementById('bookParent').value;
+        $.ajax({
+            url: `/api/bookInput/?text=${text}`,
+            method: "GET",
+            success: function(books) {
+                $('#books').empty();
+                let datalist = $("#books")
+                for (b of books) {
+                    if (b.title != text) {
                         datalist.append(`<option value="${b.title}"></option>`);
                     }
-                },
-                error: (e, r, s) => {
-                    console.log(s);
                 }
-        });
-    }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
 }
 
 function getCustomers() {
-        let customerParent = $("#customerParent");
-        let text = customerParent.val();
-        if (customerParent.attr("data-last") != text) {
-            $.ajax({
-                url: `/api/customerInput/?text=${text}`,
-                method: "GET",
-                success: function(customers) {
-                    customerParent.attr("data-last", text)
-                    $('#customers').empty();
-                    let datalist = $("#customers")
-                    for (c of customers) {
-                        datalist.append(`<option value="${c.lastName}, ${c.firstName}"></option>`);
-                    }
-                },
-                error: (e, r, s) => {
-                    console.log(s);
+        let text = document.getElementById('customerParent').value;
+        $.ajax({
+            url: `/api/customerInput/?text=${text}`,
+            method: "GET",
+            success: function(customers) {
+                $('#customers').empty();
+                let datalist = $("#customers")
+                for (c of customers) {
+                    datalist.append(`<option value="${c.lastName}, ${c.firstName}"></option>`);
                 }
-        });
-    }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
 }
 
 function getCovers() {
-        let coverParent = $("#coverParent");
-        let text = coverParent.val();
-        if (coverParent.attr("data-last") != text) {
-            $.ajax({
-                url: `/api/coverInput/?text=${text}`,
-                method: "GET",
-                success: function(covers) {
-                    coverParent.attr("data-last", text)
-                    $('#covers').empty();
-                    let datalist = $("#covers")
-                    for (c of covers) {
+        let text = document.getElementById('coverParent').value;
+        $.ajax({
+            url: `/api/coverInput/?text=${text}`,
+            method: "GET",
+            success: function(covers) {
+                $('#covers').empty();
+                let datalist = $("#covers")
+                for (c of covers) {
+                    if (c.cover != text) {
                         datalist.append(`<option value="${c.cover}"></option>`);
                     }
-                },
-                error: (e, r, s) => {
-                    console.log(s);
                 }
-        });
-    }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
 }
 
 function getConditions() {
-        let conditionParent = $("#conditionParent");
-        let text = conditionParent.val();
-        if (conditionParent.attr("data-last") != text) {
-            $.ajax({
-                url: `/api/conditionInput/?text=${text}`,
-                method: "GET",
-                success: function(conditions) {
-                    conditionParent.attr("data-last", text)
-                    $('#conditions').empty();
-                    let datalist = $("#conditions")
-                    for (c of conditions) {
+        let text = document.getElementById('conditionParent').value;
+        $.ajax({
+            url: `/api/conditionInput/?text=${text}`,
+            method: "GET",
+            success: function(conditions) {
+                $('#conditions').empty();
+                let datalist = $("#conditions")
+                for (c of conditions) {
+                    if (c.condition != text) {
                         datalist.append(`<option value="${c.condition}"></option>`);
                     }
-                },
-                error: (e, r, s) => {
-                    console.log(s);
                 }
-        });
-    }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
 }
 
 function getPublishers() {
-        let publisherParent = $("#publisherParent");
-        let text = publisherParent.val();
-        if (publisherParent.attr("data-last") != text) {
-            $.ajax({
-                url: `/api/publisherInput/?text=${text}`,
-                method: "GET",
-                success: function(publishers) {
-                    publisherParent.attr("data-last", text)
-                    $('#publishers').empty();
-                    let datalist = $("#publishers")
-                    for (p of publishers) {
+        let text = document.getElementById('publisherParent').value;
+        $.ajax({
+            url: `/api/publisherInput/?text=${text}`,
+            method: "GET",
+            success: function(publishers) {
+                $('#publishers').empty();
+                let datalist = $("#publishers")
+                for (p of publishers) {
+                    if (p.publisher != text) {
                         datalist.append(`<option value='${p.publisher}'></option>`)
                     }
-                },
-                error: (e, r, s) => {
-                    console.log(s);
                 }
-        });
-    }
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
 }
 
 function getSeries() {
-        let seriesParent = $("#seriesParent");
-        let text = seriesParent.val();
-        if (seriesParent.attr("data-last") != text) {
-            $.ajax({
-                url: `/api/seriesInput/?text=${text}`,
-                method: "GET",
-                success: function(series) {
-                    seriesParent.attr("data-last", text)
-                    $('#series').empty();
-                    let datalist = $("#series")
-                    if (series.length == 0) {
-                        datalist.append('<option>No item found</option>')
-                    } else {
-                        for (s of series) {
+        let text = document.getElementById('seriesParent').value;
+        $.ajax({
+            url: `/api/seriesInput/?text=${text}`,
+            method: "GET",
+            success: function(series) {
+                $('#series').empty();
+                let datalist = $("#series")
+                if (series.length == 0) {
+                    datalist.append('<option>No item found</option>')
+                } else {
+                    for (s of series) {
+                        if (s.series != text) {
                             datalist.append(`<option value='${s.series}'></option>`)
                         }
-                    } 
-                },
-                error: (e, r, s) => {
-                    console.log(s);
-                }
-        });
-    }
+                    }
+                } 
+            },
+            error: (e, r, s) => {
+                console.log(s);
+            }
+    });
 }
 </script>
 </html>
