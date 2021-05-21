@@ -65,7 +65,7 @@ function getTopics() {
                 url: `/api/topicInput/?text=${text}`,
                 method: "GET",
                 success: function(topics) {
-                    authorLastName.attr("data-last", text)
+                    topicParent.attr("data-last", text)
                     $('#topics').empty();
                     let datalist = $("#topics")
                     for (t of topics) {
@@ -109,7 +109,7 @@ function getBooks() {
                 url: `/api/bookInput/?text=${text}`,
                 method: "GET",
                 success: function(books) {
-                    authorLastName.attr("data-last", text)
+                    bookParent.attr("data-last", text)
                     $('#books').empty();
                     let datalist = $("#books")
                     for (b of books) {
@@ -131,7 +131,7 @@ function getCustomers() {
                 url: `/api/customerInput/?text=${text}`,
                 method: "GET",
                 success: function(customers) {
-                    authorLastName.attr("data-last", text)
+                    customerParent.attr("data-last", text)
                     $('#customers').empty();
                     let datalist = $("#customers")
                     for (c of customers) {
@@ -153,7 +153,7 @@ function getCovers() {
                 url: `/api/coverInput/?text=${text}`,
                 method: "GET",
                 success: function(covers) {
-                    authorLastName.attr("data-last", text)
+                    coverParent.attr("data-last", text)
                     $('#covers').empty();
                     let datalist = $("#covers")
                     for (c of covers) {
@@ -175,7 +175,7 @@ function getConditions() {
                 url: `/api/conditionInput/?text=${text}`,
                 method: "GET",
                 success: function(conditions) {
-                    authorLastName.attr("data-last", text)
+                    conditionParent.attr("data-last", text)
                     $('#conditions').empty();
                     let datalist = $("#conditions")
                     for (c of conditions) {
@@ -197,7 +197,7 @@ function getPublishers() {
                 url: `/api/publisherInput/?text=${text}`,
                 method: "GET",
                 success: function(publishers) {
-                    authorLastName.attr("data-last", text)
+                    publisherParent.attr("data-last", text)
                     $('#publishers').empty();
                     let datalist = $("#publishers")
                     for (p of publishers) {
@@ -219,7 +219,7 @@ function getSeries() {
                 url: `/api/seriesInput/?text=${text}`,
                 method: "GET",
                 success: function(series) {
-                    authorLastName.attr("data-last", text)
+                    seriesParent.attr("data-last", text)
                     $('#series').empty();
                     let datalist = $("#series")
                     if (series.length == 0) {

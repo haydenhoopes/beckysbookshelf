@@ -11,14 +11,14 @@ for simple models but not complex ones. -->
             <div class="row">
                 <div class="col-sm-6">
                     <p><label to="series">Series Name</label>
-                    <input type="text" name="series" id="series"></p>
+                    <input type="text" name="series" id="series" required></p>
                 </div>
             </div>
 
         </fieldset>
         <div class="form-group">
             <button  class="btn btn-outline-primary" type="submit">Submit</button>
-            <a class="btn btn-outline-secondary" href="/series/">Browse all series</a>
+            <a class="btn btn-outline-secondary" href="/series/" target="_blank">Browse all series</a>
             <a class="text-muted m-2" style="float:right; cursor:pointer" id='cancel' onclick="window.history.back();">Cancel</a>
         </div>
     </form>

@@ -9,14 +9,14 @@
             <div class="row">
                 <div class="col-sm-6">
                     <p><label to="firstName">First Name</label>
-                    <input class="form-control" type="text" name="firstName" id="firstName"></p>
+                    <input class="form-control" type="text" name="firstName" id="firstName" required></p>
     
                     <p><label to="lastName">Last Name</label>
-                    <input class="form-control" type="text" name="lastName" id="lastName"></p>
+                    <input class="form-control" type="text" name="lastName" id="lastName" required></p>
                 </div>
                 <div class="col-sm-6">
                     <label to="topicName">Main Topic</label>
-                    <input class="form-control" type="text" name="topicName" placeholder="Start typing to search" id="topicParent" list="topics" oninput="getTopics()" autocomplete="off">
+                    <input class="form-control" type="text" name="topicName" placeholder="Start typing to search" id="topicParent" list="topics" oninput="getTopics()" autocomplete="off" required>
                     <datalist id="topics">
                     </datalist>
                     <p><a href="/topics/create/" target="_blank">Add a new topic</a></p>                    
@@ -26,7 +26,7 @@
         </fieldset>
         <div class="form-group">
             <button  class="btn btn-outline-primary" type="submit">Submit</button>
-            <a class="btn btn-outline-secondary" href="/authors/">Browse all authors</a>
+            <a class="btn btn-outline-secondary" href="/authors/" target="_blank">Browse all authors</a>
             <a class="text-muted m-2" style="float:right; cursor:pointer" id='cancel' onclick="window.history.back();">Cancel</a> 
         </div>
     </form>

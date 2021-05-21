@@ -181,7 +181,8 @@ def bookCreateView(req):
 class BookUpdateView(LoginRequiredMixin, UpdateView):
     model = Books
     fields = ['Title', 'CopyrightYear', 'PublisherID', 'SeriesID', 'AuthorID', 'TopicID', 'ISBN']
-    template_name = 'home/books/create.html'
+    template_name = 'home/books/_create.html'
+    context_object_name = 'book'
     success_url = '/browseall/'    
 class BookDeleteView(LoginRequiredMixin, DeleteView):
     model = Books

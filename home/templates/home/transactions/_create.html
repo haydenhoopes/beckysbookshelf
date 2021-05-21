@@ -15,21 +15,21 @@
                     <input type="text" name="book" placeholder="Start typing to search" id="bookParent" list="books" oninput="getBooks()" class="form-control" required autocomplete="off" {% if transaction %} value="{{ transaction.BookID }}" {% endif %} autocomplete="off">
                     <datalist id="books">
                     </datalist>
-                    <p><a href="/browseall/create/">Add a new book</a></p>
+                    <p><a href="/browseall/create/" target="_blank">Add a new book</a></p>
 
                     <p><label to="cover">Cover</label>
                     <input type="text" name="cover" placeholder="Start typing to search" id="coverParent" list="covers" oninput="getCovers()" class="form-control" required {% if transaction %} value="{{ transaction.CoverID }}" {% endif %} autocomplete="off">
                     <datalist id="covers">
                     </datalist>
-                    <p><a href="/covers/create/">Add a new cover</a></p>
+                    <p><a href="/covers/create/" target="_blank">Add a new cover</a></p>
 
                     <p><label to="customer">Customer</label>
                         <input type="text" name="customer" placeholder="Search by last name" id="customerParent" list="customers" oninput="getCustomers()" class="form-control" required {% if transaction %} value="{{ transaction.CustomerID }}" {% endif %} autocomplete="off">
                         <datalist id="customers">
                         </datalist>
-                        <p><a href="/customers/create/">Add a new customer</a></p>
+                        <p><a href="/customers/create/" target="_blank">Add a new customer</a></p>
                     <p><label for="quantity">Quantity</label>
-                        <input class="form-control" type="number" name="quantity" {% if transaction %} value="{{ transaction.Qty }}" {% endif %}>
+                        <input class="form-control" type="number" name="quantity" {% if transaction %} value="{{ transaction.Qty }}" {% endif %} required>
                     </p>
                 </div>
 
@@ -44,7 +44,7 @@
                         <input type="text" name="condition" placeholder="Start typing to search" id="conditionParent" list="conditions" oninput="getConditions()" class="form-control" required {% if transaction %} value="{{ transaction.ConditionID }}" {% endif %} autocomplete="off">
                         <datalist id="conditions">
                         </datalist>
-                        <p><a href="/conditions/create/">Add a new condition</a></p>
+                        <p><a href="/conditions/create/" target="_blank">Add a new condition</a></p>
 
                     <p><label to="description">Description</label>
                         <textarea style="resize: vertical;" class="form-control" name="description" id="description" form="transactionForm">{% if transaction %}{{ transaction.Description }}{% endif %}</textarea>
@@ -52,7 +52,7 @@
             </div>
             <div class="form-group">
                 <button  class="btn btn-outline-primary" type="submit">Submit</button>
-                <a class="btn btn-outline-secondary" href="/transactions/">Browse all transactions</a>
+                <a class="btn btn-outline-secondary" href="/transactions/" target="_blank">Browse all transactions</a>
                 <a class="text-muted m-2" style="float:right; cursor:pointer" id='cancel' onclick="window.history.back();">Cancel</a>    
             </div>
             <div style="text-align: center;"><a onclick="$('#moreFieldsRow')[0].classList.toggle('hidden');" href="#">More fields</a></div>

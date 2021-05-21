@@ -4,21 +4,21 @@ for simple models but not complex ones. -->
 {% load crispy_forms_tags %}
 {% block content %}
 <div style="margin: auto;" class="p-3 m-4 bg-white">
-    <form method="POST" action='/publishers/create/'>
+    <form method="POST" action='/publishers/{% if customer %}update{% else %}create{% endif %}/'>
         {% csrf_token %}
         <fieldset class="form-group">
             <legend class="border-bottom mb-4">Create Publisher</legend>
             <div class="row">
                 <div class="col-sm-6">
                     <p><label to="publisher">Publisher</label>
-                    <input type="text" name="publisher" id="publisher"></p>
+                    <input type="text" name="publisher" id="publisher" required></p>
                 </div>
             </div>
 
         </fieldset>
         <div class="form-group">
             <button  class="btn btn-outline-primary" type="submit">Submit</button>
-            <a class="btn btn-outline-secondary" href="/publishers/">Browse all publishers</a>
+            <a class="btn btn-outline-secondary" href="/publishers/" target="_blank">Browse all publishers</a>
             <a class="text-muted" style="float:right">Cancel</a>
         </div>
     </form>

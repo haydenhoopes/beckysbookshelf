@@ -9,10 +9,10 @@
             <div class="row">
                 <div class="col-sm-6">
                     <p><label to="firstName">First Name</label>
-                    <input class="form-control" type="text" name="firstName" id="firstName" {% if customer %} value="{{customer.FirstName}}" {% endif %}></p>
+                    <input class="form-control" type="text" name="firstName" id="firstName" {% if customer %} value="{{customer.FirstName}}" {% endif %} required></p>
     
                     <p><label to="lastName">Last Name</label>
-                    <input class="form-control" type="text" name="lastName" id="lastName" {% if customer %} value="{{customer.LastName}}" {% endif %}></p>
+                    <input class="form-control" type="text" name="lastName" id="lastName" {% if customer %} value="{{customer.LastName}}" {% endif %} required></p>
 
                     <p><label to="address">Address</label>
                     <input class="form-control" type="text" name="address" id="address" {% if customer %} value="{{customer.Address}}" {% endif %}></p>
@@ -38,7 +38,7 @@
         </fieldset>
         <div class="form-group">
             <button  class="btn btn-outline-primary" type="submit">Submit</button>
-            <a class="btn btn-outline-secondary" href="/customers/">Browse all customers</a>
+            <a class="btn btn-outline-secondary" href="/customers/" target="_blank">Browse all customers</a>
             <a class="text-muted m-2" style="float:right; cursor:pointer" id='cancel' onclick="window.history.back();">Cancel</a> 
         </div>
     </form>
