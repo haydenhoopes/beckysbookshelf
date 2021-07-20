@@ -5,47 +5,121 @@
     <form method="POST" id="transactionForm">
         {% csrf_token %}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">New Transaction</legend>
-            <div class="row">
+            <legend class="border-bottom mb-4 pb-2"><div style="float:left">New Sale</div>
+                <div class="d-flex flex-row-reverse">
+                    <div><input type="date" style="float:right" name="dateOfSale" id="dateOfSale" class="form-control" required {% if not transaction %} value='{% now "Y-m-d" %}' {% else %} value='{{transaction.DateOfSale|date:"Y-m-d"}}'{% endif %}></div>
+                    <div><input type="text" name="salesperson" value="Becky" class="form-control"></div>
+                </div>
+            </legend>
+            <div class="row mb-4 mx-1">
+                <div class="col-sm-6">
 
-                <div class="col-sm-6 ">
+                    <!-- Hidden values that are hard coded for simplicity -->
                     <input type="hidden" value="{{ transaction.ID }}" name="pk" id="pk">
-
-                    <label to="book">Book</label>
-                    <input type="text" name="book" placeholder="Start typing to search" id="bookParent" list="books" oninput="getBooks()" class="form-control" required autocomplete="off" {% if transaction %} value="{{ transaction.BookID }}" {% endif %} autocomplete="off">
-                    <datalist id="books">
-                    </datalist>
-                    <p><a href="/browseall/create/" target="_blank">Add a new book</a></p>
-
-                    <p><label to="cover">Cover</label>
-                    <input type="text" name="cover" placeholder="Start typing to search" id="coverParent" list="covers" oninput="getCovers()" class="form-control" required {% if transaction %} value="{{ transaction.CoverID }}" {% endif %} autocomplete="off">
-                    <datalist id="covers">
-                    </datalist>
-                    <p><a href="/covers/create/" target="_blank">Add a new cover</a></p>
+                    <input type="hidden" name="condition" value="Good">
+                    <input type="hidden" id="lastUpdate" name="lastUpdate" value='{% now "Y-m-d" %}'>
+                    <!-- ************* -->
 
                     <p><label to="customer">Customer</label>
-                        <input type="text" name="customer" placeholder="Search by last name" id="customerParent" list="customers" oninput="getCustomers()" class="form-control" required {% if transaction %} value="{{ transaction.CustomerID }}" {% endif %} autocomplete="off">
+                        <input type="text" name="customer" placeholder="Search by last name" id="customerParent" list="customers" oninput="getCustomers();getCustomerInfo();" on class="form-control form-control-sm" required {% if transaction %} value="{{ transaction.CustomerID }}" {% endif %} autocomplete="off" autofocus>
                         <datalist id="customers">
                         </datalist>
-                        <p><a href="/customers/create/" target="_blank">Add a new customer</a></p>
-                    <p><label for="quantity">Quantity</label>
-                        <input class="form-control" type="number" name="quantity" {% if transaction %} value="{{ transaction.Qty }}" {% endif %} required>
-                    </p>
+                        <a href="/customers/create/" target="_blank">Add a new customer</a></p>
                 </div>
-
-                <div class="col-sm-6">
-                    <p><label to="price">Price</label>
-                            <input type="number" name="price" id="price" class="form-control" required {% if transaction %} value="{{ transaction.Price }}" {% endif %}></p>
-
-                    <p><label to="dateOfSale">Date Of Sale</label>
-                    <input type="date" name="dateOfSale" id="dateOfSale" class="form-control" required {% if not transaction %} value='{% now "Y-m-d" %}' {% else %} value='{{transaction.DateOfSale|date:"Y-m-d"}}'{% endif %}></p>
-
-                    <p><label to="condition">Condition</label>
-                        <input type="text" name="condition" placeholder="Start typing to search" id="conditionParent" list="conditions" oninput="getConditions()" class="form-control" required {% if transaction %} value="{{ transaction.ConditionID }}" {% endif %} autocomplete="off">
-                        <datalist id="conditions">
+                <div class="col-sm-6 my-3 py-3 small" id="cus" style="border: 2px solid lightgray;">
+                    <p style="margin: 0;" id="customerName">Name:</p>
+                    <p style="margin: 0;" id="customerAddress">Address:</p>
+                    <p style="margin: 0;" id="customerPhone">Phone:</p>
+                    <p style="margin: 0;" id="customerEmail">Email:</p>
+                </div>
+            </div>
+            <a class="btn bg-primary btn-sm mb-2 text-light" type="button" id="addRowBtn">Add row</a>
+            <table class="table table-sm table-borderless table-responsive" id="bookTableId">
+                <tr>
+                    <th></th>
+                    <th>Title</th>
+                    <th>#</th>
+                    <th>Price</th>
+                    <th>Discount</th>
+                    <th>Cover Type</th>
+                    <th>Tax Exempt</th>
+                    <th></th>
+                </tr>
+                <tr id="row1">
+                    <td><input type="checkbox" name="row1" id="" style="width:20px;height:20px"></td>
+                    <td>                    
+                        <input type="text" name="books[]" placeholder="Start typing to search" id="bookParent" list="books" oninput="getBooks()" class="form-control" required autocomplete="off" {% if transaction %} value="{{ transaction.BookID }}" {% endif %} autocomplete="off">
+                        <datalist id="books">
                         </datalist>
-                        <p><a href="/conditions/create/" target="_blank">Add a new condition</a></p>
+                    </td>
+                    <td><input class="form-control" type="number" name="quantity[]" oninput="calculatePriceOfBooks();getTotalPayment();" {% if transaction %} value="{{ transaction.Qty }}"{% else %}value="1"{% endif %} required></td>
+                    <td><input type="number" name="price[]" id="price" class="form-control" step=".25" oninput="calculatePriceOfBooks();getTotalPayment();" value="0.00"></td>
+                    <td><input max="1" min="0" step=".01" type="number" name="discount[]" id="discount" value="0" oninput="calculatePriceOfBooks();getTotalPayment();" class="form-control" {% if transaction %} value="{{ transaction.Discount }}" {% endif %}></td>
+                    <td><input type="text" name="cover" placeholder="Start typing to search" id="coverParent" list="covers" oninput="getCovers()" class="form-control" required {% if transaction %} value="{{ transaction.CoverID }}" {% endif %}>
+                        <datalist id="covers">
+                        </datalist></td>
+                    <td><input type="number" name="taxExempt" id="taxExempt" value="0" step="1" max="1" min="0" class="form-control" {% if transaction %} value="{{ transaction.TaxExempt }}" {% endif %}></p></td>
+                    <td><input type="button" title="Remove row" class="text-danger form-control" value="X" onclick="if (document.querySelectorAll('tr').length > 2) {this.parentElement.parentElement.remove()};calculatePriceOfBooks();getTotalPayment();" style="border: none; padding: 0px 0px;"></td>
+                </tr>
+            </table>
 
+            <div id="payment" class="font-weight-lighter text-sm-right border-bottom mb-4 pb-2">
+                <label for="subtotal">Subtotal: $</label><input type="text" name="subtotal" id="subtotal" style="border: none; width:6em;" disabled value="0.00"><br>
+                <label for="subtotalDiscount">Discount: $</label><input type="text" name="subtotalDiscount" id="subtotalDiscount" style="border: none; width:6em;" disabled value="0.00" message="Discount must be between 0 and 1"><br>
+                <label for="subtotalTax">Tax (<span id="taxRate"></span>%): $</label><input type="text" name="subtotalTax" id="subtotalTax" style="border: none; width:6em;" disabled value="0.00"><br>
+                <label for="total">Total: $</label><input type="text" name="total" id="total" style="border: none; width:6em;" disabled value="0.00">
+            </div>
+
+            <h4 style="float: left;">Payment Information</h4>
+            <div class="row mt-2 justify-content-end">    
+                
+                <div class="col-sm-4 mr-3" id="totalPaidDiv" style="border: solid lightgray 2px">
+                    <p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">Cash $</span>
+                            </div>
+                            <input type="number" name="cash" step="0.25" min="0" id="cash" value="0" class="form-control" {% if transaction %} value="{{ transaction.Cash }}" {% endif %} oninput="getTotalPayment();">
+                          </div>
+                    </p>
+                    <p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">Check $</span>
+                            </div>
+                            <input type="number" name="check" step="0.25" min="0" id="check" value="0" class="form-control" {% if transaction %} value="{{ transaction.Check }}" {% endif %} oninput="getTotalPayment();">
+                          </div>
+                    </p>
+                    <p>
+                        <div class="input-group mb-3" id="checkNumber" style="display:none">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">Check No.</span>
+                            </div>
+                            <input type="text" name="checkNo" id="checkNo" class="form-control" {% if transaction %} value="{{ transaction.CheckNum }}" {% endif %}>
+                          </div>
+                    </p>
+                    <p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">Gift Card $</span>
+                            </div>
+                            <input type="number" name="giftCertificate" step="0.25" min="0" id="giftCertificate" value="0" class="form-control" {% if transaction %} value="{{ transaction.GiftCert }}" {% endif %} oninput="getTotalPayment();">
+                          </div>
+                    </p>
+                    <p>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                              <span class="input-group-text">Other $</span>
+                            </div>
+                            <input type="number" name="other" id="other" step="0.25" min="0" value="0" class="form-control" {% if transaction %} value="{{ transaction.Cash }}" {% endif %} oninput="getTotalPayment();">
+                          </div>
+                    </p>
+                    <p>Total Paid: $ <span id="totalPaid">0.00</span></p>
+                    <p>Change Due: $ <span id="totalChangeDue">0.00</span></p>
+                </div>
+            </div>
+                        
+                        
                     <p><label to="description">Description</label>
                         <textarea style="resize: vertical;" class="form-control" name="description" id="description" form="transactionForm">{% if transaction %}{{ transaction.Description }}{% endif %}</textarea>
                 </div>
@@ -118,8 +192,6 @@
             </div>
 
         </fieldset>
-        <input type="hidden" id="lastUpdate" name="lastUpdate" value='{% now "Y-m-d" %}'>
-
     </form>
 </div>
 
@@ -129,4 +201,99 @@
   opacity: 0;
 }
 </style>
+<script>
+function getCustomerInfo() {
+        let text = document.getElementById('customerParent').value;
+        $("#cus").css("border", "2px solid lightgray");
+        $.ajax({
+            url: `/api/customerInput/?text=${text}`,
+            method: "GET",
+            success: function(customers) {
+                if (text === "") {
+                    $("#cus").css("border", "2px solid lightgray");
+                }
+                let customer = customers[0]
+                $("#customerName").html(`Name: ${customer.lastName}, ${customer.firstName}`);
+                $("#customerAddress").html(`Address: ${customer.address} ${customer.city}, ${customer.state} ${customer.zip}`);
+                $("#customerPhone").html(`Phone: ${customer.homePhone}`);
+                $("#customerEmail").html(`Email: ${customer.email}`);
+                $("#cus").css("border", "2px solid lightgreen");
+            },
+            error: (e, r, s) => {
+                $("#cus").css("border", "2px solid darkred");
+                console.log(s);
+            },
+            complete: function() {
+                let text = document.getElementById('customerParent').value;
+                if (text === "") {
+                    $("#cus").css("border", "2px solid lightgray");
+                }
+            }
+    });
+}
+$("#addRowBtn").on("click", function() {
+    let rows = document.querySelectorAll("tr");
+    let newRow = rows[rows.length-1].cloneNode(true);
+    newRow.id = `row${rows.length}`;
+    document.querySelector("table tbody").append(newRow);
+    calculatePriceOfBooks();
+});
+
+function calculatePriceOfBooks() {
+    let i = 0;
+    let taxRate = 0.065;
+    let finalSubtotal = 0.0;
+    let finalDiscount = 0.0;
+    let finalTotal = 0.0;
+    for (row of document.querySelectorAll("tr")) {
+        if (i != 0) {
+            let price = parseFloat(row.childNodes[7].childNodes[0].value);
+            let discount = parseFloat(row.childNodes[9].childNodes[0].value);
+            let trade = parseFloat(row.childNodes[11].childNodes[0].value);
+            let resale = parseFloat(row.childNodes[13].childNodes[0].value);
+            let q = Number(row.childNodes[5].childNodes[0].value);
+
+            // Get the prices for stuff
+            finalSubtotal += price*q;
+            finalDiscount += discount * price * q;
+            finalTotal += (price*(1-discount) * (1 + taxRate))*q;
+        }
+        i++;
+    }
+    $("#subtotal").val(Number(finalSubtotal).toFixed(2));
+    $("#subtotalDiscount").val(Number(finalDiscount).toFixed(2));
+    $("#taxRate").html((taxRate*100).toFixed(1));
+    $("#subtotalTax").val(Number(taxRate*(finalSubtotal-finalDiscount)).toFixed(2));
+    $("#total").val(Number(finalTotal).toFixed(2));
+}
+
+$("#check").on("input", function() {
+    if (Number($("#check").val()) != 0) {
+        $("#checkNumber").css("display", "flex");
+    } else {
+        $("#checkNumber").css("display", "none")
+    }
+})
+
+function getTotalPayment() {
+    let total = parseFloat($("#total").val());
+    let cash = parseFloat($("#cash").val());
+    let check = parseFloat($("#check").val());
+    let gift = parseFloat($("#giftCertificate").val());
+    let other = parseFloat($("#other").val());
+    $("#totalPaid").html((cash+check+gift+other).toFixed(2));
+
+    if (cash+check+gift+other > total) {
+        $("#totalPaidDiv").css("border", "2px solid lightgreen");
+        $("#totalChangeDue").html(((cash+check+gift+other)-total).toFixed(2));
+    } else if (cash + check + gift + other == 0) {
+        $("#totalPaidDiv").css("border", "2px solid lightgray");
+        $("#totalChangeDue").html("");
+    } else {
+        $("#totalPaidDiv").css("border", "2px solid darkred");
+        $("#totalChangeDue").html("");
+    }
+}
+
+</script>
 {% endblock %}

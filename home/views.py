@@ -494,7 +494,8 @@ def customerInput(request):
     customers = Customers.objects.raw(query, [customerInput + '%', customerInput + '%'])
     customerList = []
     for customer in customers:
-        customerList.append({'id': customer.CustomerID, 'firstName': customer.FirstName, 'lastName': customer.LastName})
+        customerList.append({'id': customer.CustomerID, 'firstName': customer.FirstName, 'lastName': customer.LastName, 'address': customer.Address, 'city': customer.City,
+        'state': customer.State, 'zip': customer.Zip, 'homePhone': customer.HomePhone, 'email': customer.Email})
     return HttpResponse(json.dumps(customerList), 'application/json')
 def coverInput(request):
     coverInput = request.GET.get('text', '')
