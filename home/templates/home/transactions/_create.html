@@ -209,15 +209,41 @@ function getCustomerInfo() {
             url: `/api/customerInput/?text=${text}`,
             method: "GET",
             success: function(customers) {
+                    $("#customerName").html(`Name:`);
+                    $("#customerAddress").html(`Address:`);
+                    $("#customerPhone").html(`Phone:`);
+                    $("#customerEmail").html(`Email:`);
+                    $("#cus").css("border", "2px solid lightgray");
+
                 if (text === "") {
                     $("#cus").css("border", "2px solid lightgray");
-                }
-                let customer = customers[0]
-                $("#customerName").html(`Name: ${customer.lastName}, ${customer.firstName}`);
-                $("#customerAddress").html(`Address: ${customer.address} ${customer.city}, ${customer.state} ${customer.zip}`);
-                $("#customerPhone").html(`Phone: ${customer.homePhone}`);
-                $("#customerEmail").html(`Email: ${customer.email}`);
-                $("#cus").css("border", "2px solid lightgreen");
+                } else if (customers.length == 0) {
+                    $.ajax({
+                        url: `/api/customerInput/?text=${text.split(", ")[0]}`,
+                        method: "GET",
+                        success: function(customers) { 
+                            let name = text.split(", ");
+                            let fname = name[1];
+                            let lname = name[0];
+                            if (customers.length >= 1) {
+                                for (c of customers) {
+                                    if (c.lastName == lname && c.firstName == fname) {
+                                        $("#customerName").html(`Name: ${c.lastName}, ${c.firstName}`);
+                                        $("#customerAddress").html(`Address: ${c.address} ${c.city}, ${c.state} ${c.zip}`);
+                                        $("#customerPhone").html(`Phone: ${c.homePhone}`);
+                                        $("#customerEmail").html(`Email: ${c.email}`);
+                                        $("#cus").css("border", "2px solid lightgreen");
+                                        return
+                                    }
+                                }
+                            } else {
+                                $("#cus").css("border", "2px solid darkred");
+                            }
+                        }
+                    })
+                } else {
+                    $("#cus").css("border", "2px solid darkred");
+                }              
             },
             error: (e, r, s) => {
                 $("#cus").css("border", "2px solid darkred");
