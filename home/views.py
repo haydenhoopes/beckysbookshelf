@@ -315,39 +315,43 @@ class TransactionDetailView(LoginRequiredMixin, DetailView):
 @login_required
 def transactionCreateView(req):
     if req.method == "POST":
-        t = Transactions(
-                BookID=Books.objects.filter(Title=req.POST.get("book", ''))[0],
-                Price=req.POST.get("price", 0),
-                Resale=req.POST.get("resale", 0),
-                TradePrice=req.POST.get("tradePrice", 0),
-                Qty=req.POST.get("quantity", 1),
-                TradeAllowed=req.POST.get("tradeAllowed", 1),
-                #PercentTrade=req.POST.get("percentTrade", 0),
-                CoverPrice=req.POST.get("coverPrice", 0),
-                Discount=req.POST.get("discount", 0),
-                NonTradex=req.POST.get("nonTradeX", 0),
-                CoverID=CoverType.objects.filter(Cover=req.POST.get("cover", 'Paperback'))[0],
-                LastUpdate=req.POST.get("lastUpdate", None),
-                NoTradeAllowed=req.POST.get("noTradeAllowed", 1),
-                TaxExempt=req.POST.get("taxExempt", 0),
-                ConditionID=Conditions.objects.filter(Condition=req.POST.get("condition", 'Good'))[0],
-                DateOfSale=req.POST.get("dateOfSale", ""),
-                CustomerID=Customers.objects.filter(LastName=req.POST.get("customer", "Becky & David").split(",")[0])[0],
-                #Tax=req.POST.get("tax", 0),
-                Cash=req.POST.get("cash", 0),
-                Check=req.POST.get("check", 0),
-                CheckNum=req.POST.get("checkNo", 0),
-                GiftCert=req.POST.get("giftCertificate", 0),
-                Description=req.POST.get("description", ""),
-                TaxRate=req.POST.get("taxRate", 0),
-                SalesPerson=req.POST.get("salesPerson", "Becky"),
-                Type=req.POST.get("type", ""),
-                TradeCost=req.POST.get("tradeCost", 0),
-                InOut=req.POST.get("inOut", 0),
-                NonTradeY=req.POST.get("nonTradeY", 0),
-                Labels=req.POST.get("labels", 0),
-                )
-        t.save()
+        print(req.POST)
+        books = req.POST.getlist('books')
+        print(req.POST.get("cash")[0])
+        for i in range(len(books)):
+            t = Transactions(
+                    BookID=Books.objects.filter(Title=books[i])[0],
+                    Price=float(req.POST.getlist("price", [0])[i]),
+                    Resale=float(req.POST.getlist("resale", [0])[i]),
+                    TradePrice=-1 * float(req.POST.getlist("tradePrice", [0])[i]) if req.POST.getlist("type", ["Sale"])[0] else float(req.POST.getlist("tradePrice", [0])[i]), # negative tradeprice if it was a sale (ie they used credit) but positive credit otherwise
+                    Qty=int(req.POST.getlist("quantity", [1])[i]),
+                    TradeAllowed=0 if req.POST.getlist("noTradeAllowed", [0])[0] == 0 else 1,
+                    #PercentTrade=req.POST.get("percentTrade", 0),
+                    CoverPrice=float(req.POST.getlist("coverPrice", 0)[0]),
+                    Discount=int(req.POST.getlist("discount", [0])[i]),
+                    NonTradex=0.0, # This field is only ever 0.0
+                    CoverID=CoverType.objects.filter(Cover=req.POST.getlist("cover", ['Paperback'])[i])[0],
+                    LastUpdate=req.POST.getlist("lastUpdate", [None])[0],
+                    NoTradeAllowed=1 if req.POST.getlist("noTradeAllowed", ["on"])[0] == "on" else 0,
+                    TaxExempt=req.POST.getlist("taxExempt", [0])[i],
+                    ConditionID=Conditions.objects.filter(Condition=req.POST.getlist("condition", ['Good'])[0])[0],
+                    DateOfSale=req.POST.getlist("dateOfSale", [""])[0],
+                    CustomerID=Customers.objects.filter(LastName=req.POST.getlist("customer", ["Becky & David"])[0].split(",")[0])[0],
+                    #Tax=req.POST.getlist("tax", 0),
+                    Cash=float(req.POST.getlist("cash", [0])[0]),
+                    Check=float(req.POST.getlist("check", [0])[0]),
+                    CheckNum=0 if req.POST.getlist("checkNo")[0] == "" else req.POST.getlist("checkNo", [0])[0],
+                    GiftCert=float(req.POST.getlist("giftCertificate", [0])[0]),
+                    Description=req.POST.getlist("description", [""])[0],
+                    TaxRate=float(req.POST.getlist("taxRate", [.065])[0]),
+                    SalesPerson=req.POST.getlist("salesPerson", ["Becky"])[0],
+                    Type=req.POST.getlist("type", ["Sale"])[0],
+                    TradeCost=0.0,
+                    InOut=-1 if req.POST.getlist("type", ["Sale"])[0] == "Sale" else 1,
+                    NonTradeY=0.0,
+                    Labels=req.POST.getlist("labels", [0])[0],
+                    )
+            t.save()
         messages.add_message(req, messages.SUCCESS, 'Transaction created successfully!')
         return redirect("/transactions/")
     return render(req, 'home/transactions/_create.html')    
@@ -561,6 +565,22 @@ def seriesInput(request):
     for s in series:
         seriesList.append({'id': s.SeriesID, 'series': s.Series})
     return HttpResponse(json.dumps(seriesList), 'application/json')
+def getBookCredit(request):
+    customerId = request.GET.get('text', '')
+    if customerId == "":
+        return "Not available"
+    if "'" in customerId:
+        customerId = customerId.replace("'", "''")
+    query = f"""
+        SELECT ID, SUM(TradePrice) AS [TradePrice] from home_transactions as t
+        JOIN home_customers as c on t.CustomerID = c.CustomerID
+        WHERE c.CustomerID = %s;
+    """
+    bookCredit = Transactions.objects.raw(query, [customerId])
+    bc = 0
+    for t in bookCredit:
+        bc = t.TradePrice
+    return HttpResponse(json.dumps({"bookCredit": bc}))
 
 # The views for the Publishers
 class PublisherListView(ListView):

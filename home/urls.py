@@ -9,7 +9,7 @@ from .views import (
     SeriesListView, SeriesDeleteView, SeriesDetailView, SeriesUpdateView,
     CoverListView, CoverDetailView, CoverCreateView, CoverUpdateView, CoverDeleteView,
     CustomerListView, CustomerDetailView, CustomerUpdateView, CustomerDeleteView, BrowseBookListView,
-    ConditionListView, ConditionDetailView, ConditionUpdateView, ConditionDeleteView, ConditionCreateView
+    ConditionListView, ConditionDetailView, ConditionUpdateView, ConditionDeleteView, ConditionCreateView, getBookCredit
 )
 from . import views
 
@@ -55,6 +55,7 @@ urlpatterns = [
     path('api/transactions/', views.getTransactionData, name="apiTransactions"),
     path('api/books', views.getBookData, name="apiBooks"),
     path('api/transactions', views.getTransactionData, name="apiTransactions"),
+    path('api/bookCredit', views.getBookCredit, name="getBookCredit"),
 
     # Internal list queries
     path('api/authorInput/', views.authorInput, name="apiAuthorInput"),
