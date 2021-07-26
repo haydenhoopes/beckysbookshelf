@@ -573,7 +573,7 @@ def getBookCredit(request):
         customerId = customerId.replace("'", "''")
     query = f"""
         SELECT ID, SUM(TradePrice) AS TradePrice from home_transactions as t
-        JOIN home_customers as c on t.CustomerID = c.CustomerID
+        JOIN home_customers as c on (t.CustomerID = c.CustomerID)
         WHERE c.CustomerID = %s;
     """
     bookCredit = Transactions.objects.raw(query, [customerId])
