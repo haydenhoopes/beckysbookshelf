@@ -27,7 +27,7 @@
                     <!-- ************* -->
 
                     <p><label to="customer">Customer</label>
-                        <input type="text" name="customer" placeholder="Search by last name" id="customerParent" list="customers" oninput="getCustomers();getCustomerInfo();" on class="form-control form-control-sm" required {% if transaction %} value="{{ transaction.CustomerID }}" {% endif %} autocomplete="off" autofocus>
+                        <input type="text" name="customer" placeholder="Search by last name" id="customerParent" list="customers" oninput="getCustomers();getCustomerInfo();getTotalPayment();" on class="form-control form-control-sm" required {% if transaction %} value="{{ transaction.CustomerID }}" {% endif %} autocomplete="off" autofocus>
                         <datalist id="customers">
                         </datalist>
                         <a href="/customers/create/" target="_blank">Add a new customer</a></p>
@@ -142,7 +142,7 @@
             </div>
 
             <div class="form-group mt-4">
-                <button  class="btn btn-outline-primary" type="submit">Submit</button>
+                <button  class="btn btn-outline-primary" type="submit" id="submitBtn" disabled>Submit</button>
                 <a class="btn btn-outline-secondary" href="/transactions/" target="_blank">Browse all transactions</a>
                 <a class="text-muted m-2" style="float:right; cursor:pointer" id='cancel' onclick="window.history.back();">Cancel</a>    
             </div>
@@ -278,12 +278,18 @@ function getTotalPayment() {
     if (cash+check+gift+other+tradePrice > total) {
         $("#totalPaidDiv").css("border", "2px solid lightgreen");
         $("#totalChangeDue").html(((cash+check+gift+other+tradePrice)-total).toFixed(2));
+        $("#submitBtn").prop('disabled', false);
+        if ($("#cus").css("border") == "2px solid lightgreen") {
+            $("#submitBtn").prop('disabled', false);    
+        } 
     } else if (cash + check + gift + other + tradePrice == 0) {
         $("#totalPaidDiv").css("border", "2px solid lightgray");
         $("#totalChangeDue").html("");
+        $("#submitBtn").prop('disabled', true);    
     } else {
         $("#totalPaidDiv").css("border", "2px solid darkred");
         $("#totalChangeDue").html("");
+        $("#submitBtn").prop('disabled', true);
     }
 }
 function priceTypeChange() {
