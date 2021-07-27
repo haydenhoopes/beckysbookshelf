@@ -323,7 +323,7 @@ def transactionCreateView(req):
                     BookID=Books.objects.filter(Title=books[i])[0],
                     Price=float(req.POST.getlist("price", [0])[i]),
                     Resale=float(req.POST.getlist("resale", [0])[i]),
-                    TradePrice=-1 * float(req.POST.getlist("tradePrice", [0])[i]) if req.POST.getlist("type", ["Sale"])[0] else float(req.POST.getlist("tradePrice", [0])[i]), # negative tradeprice if it was a sale (ie they used credit) but positive credit otherwise
+                    TradePrice=-1 * float(req.POST.getlist("tradePrice", [0])[0]) if req.POST.getlist("type", ["Sale"])[0] == "Sale" else float(req.POST.getlist("tradePrice", [0])[0]), # negative tradeprice if it was a sale (ie they used credit) but positive credit otherwise
                     Qty=int(req.POST.getlist("quantity", [1])[i]),
                     TradeAllowed=0 if req.POST.getlist("noTradeAllowed", [0])[0] == 0 else 1,
                     #PercentTrade=req.POST.get("percentTrade", 0),

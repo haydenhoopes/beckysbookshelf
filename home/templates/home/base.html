@@ -96,7 +96,7 @@ function getAuthors() {
 }
 
 function getBooks() {
-        let text = document.getElementById('bookParent').value;
+        let text = document.getElementById('bookParent-1').value;
         $.ajax({
             url: `/api/bookInput/?text=${text}`,
             method: "GET",

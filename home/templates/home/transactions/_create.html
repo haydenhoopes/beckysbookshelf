@@ -55,7 +55,7 @@
                 <tr id="row1">
                     <td><input type="checkbox" name="noTradeAllowed" id="noTradeAllowed" style="width:20px;height:20px;"></td>
                     <td>                    
-                        <input type="text" name="books" placeholder="Start typing to search" id="bookParent" list="books" oninput="getBooks()" class="form-control" required autocomplete="off" {% if transaction %} value="{{ transaction.BookID }}" {% endif %} autocomplete="off">
+                        <input type="text" name="books" placeholder="Start typing to search" id="bookParent-1" list="books" oninput="getBooks()" class="form-control" required autocomplete="off" {% if transaction %} value="{{ transaction.BookID }}" {% endif %} autocomplete="off">
                         <datalist id="books">
                         </datalist>
                     </td>
