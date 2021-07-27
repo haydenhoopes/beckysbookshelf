@@ -317,7 +317,7 @@ def transactionCreateView(req):
     if req.method == "POST":
         print(req.POST)
         books = req.POST.getlist('books')
-        print(req.POST.get("cash")[0])
+        customerName = req.POST.getlist("customer", ["Becky & David"])[0].split(", ")
         for i in range(len(books)):
             t = Transactions(
                     BookID=Books.objects.filter(Title=books[i])[0],
@@ -336,7 +336,7 @@ def transactionCreateView(req):
                     TaxExempt=req.POST.getlist("taxExempt", [0])[i],
                     ConditionID=Conditions.objects.filter(Condition=req.POST.getlist("condition", ['Good'])[0])[0],
                     DateOfSale=req.POST.getlist("dateOfSale", [""])[0],
-                    CustomerID=Customers.objects.filter(LastName=req.POST.getlist("customer", ["Becky & David"])[0].split(",")[0])[0],
+                    CustomerID=Customers.objects.filter(LastName=customerName[0], FirstName=customerName[1])[0],
                     #Tax=req.POST.getlist("tax", 0),
                     Cash=float(req.POST.getlist("cash", [0])[0]),
                     Check=float(req.POST.getlist("check", [0])[0]),
