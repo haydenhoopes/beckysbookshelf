@@ -27,7 +27,7 @@
                     <!-- ************* -->
 
                     <p><label to="customer">Customer</label>
-                        <input type="text" name="customer" placeholder="Search by last name" id="customerParent" list="customers" oninput="getCustomers();getCustomerInfo();getTotalPayment();" on class="form-control form-control-sm" required {% if transaction %} value="{{ transaction.CustomerID }}" {% endif %} autocomplete="off" autofocus>
+                        <input type="text" name="customer" placeholder="Search by last name" id="customerParent" list="customers" oninput="getCustomers();getCustomerInfo();isSubmitDisabled();" on class="form-control form-control-sm" required {% if transaction %} value="{{ transaction.CustomerID }}" {% endif %} autocomplete="off" autofocus>
                         <datalist id="customers">
                         </datalist>
                         <a href="/customers/create/" target="_blank">Add a new customer</a></p>
@@ -55,7 +55,7 @@
                 <tr id="row1">
                     <td><input type="checkbox" name="noTradeAllowed" id="noTradeAllowed" style="width:20px;height:20px;"></td>
                     <td>                    
-                        <input type="text" name="books" placeholder="Start typing to search" id="bookParent-1" list="books" oninput="getBooks()" class="form-control" required autocomplete="off" {% if transaction %} value="{{ transaction.BookID }}" {% endif %} autocomplete="off">
+                        <input type="text" name="books" placeholder="Start typing to search" id="bookParent-1" list="books" oninput="isSubmitDisabled();getBooks();" class="form-control" required autocomplete="off" {% if transaction %} value="{{ transaction.BookID }}" {% endif %} autocomplete="off">
                         <datalist id="books">
                         </datalist>
                     </td>
@@ -63,11 +63,11 @@
                     <td class="price"><input type="number" name="price" id="price" class="form-control" step=".25" oninput="calculatePriceOfBooks();getTotalPayment();" value="0.00"></td>
                     <td class="price hidden"><input type="number" name="coverPrice" class="form-control" step=".25" oninput="calculatePriceOfBooks();getTotalPayment();" value="0.00"></td>
                     <td><input max="100" min="0" step="1" type="number" name="discount" id="discount" value="0" oninput="calculatePriceOfBooks();getTotalPayment();" class="form-control" {% if transaction %} value="{{ transaction.Discount }}" {% endif %}></td>
-                    <td><input type="text" name="cover" placeholder="Start typing to search" id="coverParent" list="covers" oninput="getCovers()" class="form-control" required {% if transaction %} value="{{ transaction.CoverID }}" {% endif %}>
+                    <td><input type="text" name="cover" placeholder="Start typing to search" id="coverParent" list="covers" oninput="isSubmitDisabled();getCovers();" class="form-control" required {% if transaction %} value="{{ transaction.CoverID }}" {% endif %}>
                         <datalist id="covers">
                         </datalist></td>
                     <td><input type="number" name="taxExempt" id="taxExempt" value="0" step="1" max="1" min="0" class="form-control" {% if transaction %} value="{{ transaction.TaxExempt }}" {% endif %}></p></td>
-                    <td><input type="button" title="Remove row" class="text-danger form-control" value="X" onclick="if (document.querySelectorAll('tr').length > 2) {this.parentElement.parentElement.remove()};calculatePriceOfBooks();getTotalPayment();" style="border: none; padding: 0px 0px;"></td>
+                    <td><input type="button" title="Remove row" class="text-danger form-control" value="X" onclick="if (document.querySelectorAll('tr').length > 2) {this.parentElement.parentElement.remove()};calculatePriceOfBooks();getTotalPayment();isSubmitDisabled();" style="border: none; padding: 0px 0px;"></td>
                     <input type="hidden" name="resale" value="0" id="resale" {% if transaction %} value="{{ transaction.Resale }}" {% endif %}>
                 </tr>
             </table>
@@ -142,7 +142,7 @@
             </div>
 
             <div class="form-group mt-4">
-                <button  class="btn btn-outline-primary" type="submit" id="submitBtn" disabled>Submit</button>
+                <button  class="btn btn-outline-primary" title="Some information is missing on this page." type="submit" id="submitBtn" disabled>Submit</button>
                 <a class="btn btn-outline-secondary" href="/transactions/" target="_blank">Browse all transactions</a>
                 <a class="text-muted m-2" style="float:right; cursor:pointer" id='cancel' onclick="window.history.back();">Cancel</a>    
             </div>
@@ -241,14 +241,14 @@ function calculatePriceOfBooks() {
             let price = parseFloat(row.childNodes[7].childNodes[0].value);
             let tradePrice = parseFloat(row.childNodes[9].childNodes[0].value)
             let discount = parseFloat(row.childNodes[11].childNodes[0].value) / 100;
-            let trade = parseFloat(row.childNodes[13].childNodes[0].value);
-            let resale = parseFloat(row.childNodes[15].childNodes[0].value);
             let q = Number(row.childNodes[5].childNodes[0].value);
 
             // Get the prices for stuff
             finalSubtotal += price*q + tradePrice * q;
             finalDiscount += discount*price*q + tradePrice*discount*q;
             finalTotal += (price*(1-discount) * (1 + taxRate))*q + (tradePrice*(1-discount) * (1 + taxRate))*q;
+
+            // Make resale half of the cover price if it's a trade, and equal to the price if it's a sale
         }
         i++;
     }
@@ -265,6 +265,11 @@ $("#check").on("input", function() {
         $("#checkNumber").css("display", "none")
     }
 })
+document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("input", () => {
+        isSubmitDisabled();
+    })
+})
 
 function getTotalPayment() {
     let total = parseFloat($("#total").val());
@@ -278,18 +283,12 @@ function getTotalPayment() {
     if (cash+check+gift+other+tradePrice > total) {
         $("#totalPaidDiv").css("border", "2px solid lightgreen");
         $("#totalChangeDue").html(((cash+check+gift+other+tradePrice)-total).toFixed(2));
-        $("#submitBtn").prop('disabled', false);
-        if ($("#cus").css("border") == "2px solid lightgreen") {
-            $("#submitBtn").prop('disabled', false);    
-        } 
     } else if (cash + check + gift + other + tradePrice == 0) {
         $("#totalPaidDiv").css("border", "2px solid lightgray");
-        $("#totalChangeDue").html("");
-        $("#submitBtn").prop('disabled', true);    
+        $("#totalChangeDue").html("");   
     } else {
         $("#totalPaidDiv").css("border", "2px solid darkred");
         $("#totalChangeDue").html("");
-        $("#submitBtn").prop('disabled', true);
     }
 }
 function priceTypeChange() {
@@ -304,6 +303,32 @@ function priceTypeChange() {
     } else {
         $("#priceTypeHeader").html("Cover Price");
 
+    }
+}
+function isSubmitDisabled() {
+    if ($("#cus").css("border") == "2px solid rgb(144, 238, 144)" && $("#totalPaidDiv").css("border") == "2px solid rgb(144, 238, 144)") {
+        let allFilledIn = true;
+        let i = 0;
+        for (row of document.querySelectorAll("tr")) {
+            console.log(row);
+            if (i != 0 && (row.childNodes[3].childNodes[1].value == "" || row.childNodes[13].childNodes[0].value == "")) {
+                allFilledIn = false;
+                console.log("can't enable the submit button!");
+                console.log(row.childNodes[3].childNodes[1].value);
+                console.log(row.childNodes[13].childNodes[0].value);
+            }
+            i++;
+        }
+        if (allFilledIn) {
+            $("#submitBtn").prop('disabled', false);
+            $("#submitBtn").attr('title', "");
+        } else {
+            $("#submitBtn").prop('disabled', true);
+            $("#submitBtn").prop('title', "Some information on this page is missing or incorrect.");
+        }
+    } else {
+        $("#submitBtn").prop('disabled', true);
+        $("#submitBtn").prop('title', "Some information on this page is missing or incorrect.");
     }
 }
 </script>
