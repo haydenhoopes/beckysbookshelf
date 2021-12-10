@@ -29,9 +29,13 @@ Windows:
     .\env\Scripts\activate
 
 
-You can check that you are using your virtaul environment with this command: 
+You can check that you are using your virtual environment with this command: 
 
     which python
+    
+When you finish using the virtual environment, you can deactivate it with this command:
+
+    deactivate
 
 
 ### RUN SERVER
